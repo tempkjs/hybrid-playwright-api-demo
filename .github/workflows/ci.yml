@@ -53,9 +53,11 @@ jobs:
           path: allure-results
           if-no-files-found: warn
 
-      - name: 🧾 Post summary
+      - name: 🌐 Publish Playwright report to GitHub Pages
         if: always()
-        run: |
-          echo "### ✅ Playwright Report" >> $GITHUB_STEP_SUMMARY
-          echo "[View HTML report artifact](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }})" >> $GITHUB_STEP_SUMMARY
-
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_branch: gh-pages
+          publish_dir: playwright-report
+          destination_dir: reports/latest
