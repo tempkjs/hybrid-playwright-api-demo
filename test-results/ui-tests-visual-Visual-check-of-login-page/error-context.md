@@ -1,0 +1,84 @@
+# Page snapshot
+
+```yaml
+- generic [active] [ref=e1]:
+  - generic [ref=e3]:
+    - img "adplus-dvertising" [ref=e6] [cursor=pointer]
+    - iframe [ref=e9]:
+      
+  - generic [ref=e10]:
+    - banner [ref=e11]:
+      - link [ref=e12] [cursor=pointer]:
+        - /url: https://demoqa.com
+        - img [ref=e13]
+    - generic [ref=e16]:
+      - generic [ref=e19]:
+        - generic [ref=e22] [cursor=pointer]:
+          - generic [ref=e23]:
+            - img [ref=e25]
+            - text: Elements
+          - img [ref=e30]
+        - generic [ref=e36] [cursor=pointer]:
+          - generic [ref=e37]:
+            - img [ref=e39]
+            - text: Forms
+          - img [ref=e45]
+        - generic [ref=e51] [cursor=pointer]:
+          - generic [ref=e52]:
+            - img [ref=e54]
+            - text: Alerts, Frame & Windows
+          - img [ref=e59]
+        - generic [ref=e65] [cursor=pointer]:
+          - generic [ref=e66]:
+            - img [ref=e68]
+            - text: Widgets
+          - img [ref=e73]
+        - generic [ref=e79] [cursor=pointer]:
+          - generic [ref=e80]:
+            - img [ref=e82]
+            - text: Interactions
+          - img [ref=e87]
+        - generic [ref=e91]:
+          - generic [ref=e93] [cursor=pointer]:
+            - generic [ref=e94]:
+              - img [ref=e96]
+              - text: Book Store Application
+            - img [ref=e101]
+          - list [ref=e106]:
+            - listitem [ref=e107] [cursor=pointer]:
+              - img [ref=e108]
+              - generic [ref=e110]: Login
+            - listitem [ref=e111] [cursor=pointer]:
+              - img [ref=e112]
+              - generic [ref=e114]: Book Store
+            - listitem [ref=e115] [cursor=pointer]:
+              - img [ref=e116]
+              - generic [ref=e118]: Profile
+            - listitem [ref=e119] [cursor=pointer]:
+              - img [ref=e120]
+              - generic [ref=e122]: Book Store API
+      - generic [ref=e123]:
+        - iframe [ref=e126]:
+          
+        - generic [ref=e127]:
+          - heading "Login" [level=1] [ref=e128]
+          - generic [ref=e129]:
+            - generic [ref=e130]:
+              - heading "Welcome," [level=2] [ref=e131]
+              - heading "Login in Book Store" [level=5] [ref=e132]
+            - generic [ref=e133]:
+              - generic [ref=e135]: "UserName :"
+              - textbox "UserName" [ref=e137]
+            - generic [ref=e138]:
+              - generic [ref=e140]: "Password :"
+              - textbox "Password" [ref=e142]
+            - generic [ref=e143]:
+              - button "Login" [ref=e145] [cursor=pointer]
+              - button "New User" [ref=e147] [cursor=pointer]
+      - generic [ref=e153]:
+        - img "Build PlayWright tests with AI" [ref=e155] [cursor=pointer]
+        - iframe [ref=e158]:
+          
+    - contentinfo [ref=e159]:
+      - generic [ref=e160]: © 2013-2020 TOOLSQA.COM | ALL RIGHTS RESERVED.
+```

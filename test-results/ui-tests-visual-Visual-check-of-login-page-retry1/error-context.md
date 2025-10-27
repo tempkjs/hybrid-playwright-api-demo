@@ -1,0 +1,95 @@
+# Page snapshot
+
+```yaml
+- generic [active] [ref=e1]:
+  - generic [ref=e3]:
+    - img "adplus-dvertising" [ref=e6] [cursor=pointer]
+    - iframe [ref=e9]:
+      
+  - generic [ref=e10]:
+    - banner [ref=e11]:
+      - link [ref=e12] [cursor=pointer]:
+        - /url: https://demoqa.com
+        - img [ref=e13]
+    - generic [ref=e16]:
+      - generic [ref=e19]:
+        - generic [ref=e22] [cursor=pointer]:
+          - generic [ref=e23]:
+            - img [ref=e25]
+            - text: Elements
+          - img [ref=e30]
+        - generic [ref=e36] [cursor=pointer]:
+          - generic [ref=e37]:
+            - img [ref=e39]
+            - text: Forms
+          - img [ref=e45]
+        - generic [ref=e51] [cursor=pointer]:
+          - generic [ref=e52]:
+            - img [ref=e54]
+            - text: Alerts, Frame & Windows
+          - img [ref=e59]
+        - generic [ref=e65] [cursor=pointer]:
+          - generic [ref=e66]:
+            - img [ref=e68]
+            - text: Widgets
+          - img [ref=e73]
+        - generic [ref=e79] [cursor=pointer]:
+          - generic [ref=e80]:
+            - img [ref=e82]
+            - text: Interactions
+          - img [ref=e87]
+        - generic [ref=e91]:
+          - generic [ref=e93] [cursor=pointer]:
+            - generic [ref=e94]:
+              - img [ref=e96]
+              - text: Book Store Application
+            - img [ref=e101]
+          - list [ref=e106]:
+            - listitem [ref=e107] [cursor=pointer]:
+              - img [ref=e108]
+              - generic [ref=e110]: Login
+            - listitem [ref=e111] [cursor=pointer]:
+              - img [ref=e112]
+              - generic [ref=e114]: Book Store
+            - listitem [ref=e115] [cursor=pointer]:
+              - img [ref=e116]
+              - generic [ref=e118]: Profile
+            - listitem [ref=e119] [cursor=pointer]:
+              - img [ref=e120]
+              - generic [ref=e122]: Book Store API
+      - generic [ref=e123]:
+        - iframe [ref=e126]:
+          
+        - generic [ref=e127]:
+          - heading "Login" [level=1] [ref=e128]
+          - generic [ref=e129]:
+            - generic [ref=e130]:
+              - heading "Welcome," [level=2] [ref=e131]
+              - heading "Login in Book Store" [level=5] [ref=e132]
+            - generic [ref=e133]:
+              - generic [ref=e135]: "UserName :"
+              - textbox "UserName" [ref=e137]
+            - generic [ref=e138]:
+              - generic [ref=e140]: "Password :"
+              - textbox "Password" [ref=e142]
+            - generic [ref=e143]:
+              - button "Login" [ref=e145] [cursor=pointer]
+              - button "New User" [ref=e147] [cursor=pointer]
+        - iframe [ref=e151]:
+          - generic [ref=f3e1]:
+            - generic [ref=f3e2]:
+              - generic:
+                - img [ref=f3e6] [cursor=pointer]
+                - button [ref=f3e8] [cursor=pointer]:
+                  - img [ref=f3e9]
+            - insertion [ref=f3e16]:
+              - link "Advertisement" [ref=f3e19] [cursor=pointer]:
+                - /url: https://ad.doubleclick.net/pcs/click?xai=AKAOjssY3oH7WHryTjGJJ-42KJaR8TmGVDc2GQm_HMOG6hj9UuJRywiKZHGwks2YB9jPxeOqO6UQU8I9-4fNUwOhEGeigFf8WcfsKk1WREhm4v-TqmoS_IFH-slP2-KNpS-BuTJSXee_IDp0ZOpZfoMIUJLehE8fAzAQNtEzwt_NzZKDpfnaTJfYuRFc_mWcia1wNbj7gqS6azBRuEl-rzzh_WBJyLj9vieZTmeutdWGMkI-7gg1-MAO6DcBDyjoOiaVEUEw3FgT9anlSQcYFPqnbBAdoc03iJmsGhHoSMiBpW05zyF5DX5pVyuQLOUsJizmCTNl3OmB1o2__YhBR73ArWuLDJqLFYu7MjfcCHv7T5OG9MXTY5qzOcM_LnYUYVvjyDDaoHmbRBgl89vPZ_1a__GsKOefDFHijjy0UoSRTvo3dsCXZxm4ubOtu2tErQX9_NUsMmO8EfVNcw66aIsF3kilpLOep-5BmzjO9LXWA_BzyFWW0gDgIyn2qIEhMg-ZTdGgPsQyXbuSVqris_4_nj0GzK7qasHNGm5iOltX2Q&sai=AMfl-YQWY1v7uDiiBZFOfUXmYlKLTXb6Y9cwBSjXXTGOZm65CMW6boJEytNwWRUg8ZVkqzG5Xxo_Ws475FbZwy-xOASb6VMK8ClVOdKTCsxRUtRQMrf8563R_ydm-ZEEz_nH1HoQmdT5WLA_dVkkOxO2hr8Ie1PYmWAZdwWLvfM2sD6jsUetLUUBSeHQaMBqep2pXTHZHciB_KivnL3yEHq4ll1RS96es9sVUBYjWSieoRO1DQ&sig=Cg0ArKJSzEH9aGV7ZS3m&cry=1&fbs_aeid=%5Bgw_fbsaeid%5D&crd=aHR0cHM6Ly91bml0ZWRoZWFsdGhncm91cC5jb20&urlfix=1&adurl=https://googleads.g.doubleclick.net/dbm/clk%3Fsa%3DL%26ai%3DCJC3Gm5D_aN6nKbz-rtoPp4HH8QiojufpggHq47zR_BTwLhABIMb71nlg5crlg7QOoAHu5d7iAcgBCakCx1mtBvhVSD6oAwHIA5sEqgTtAU_QjuoB-u6EpMxEV7sVVfatiyHjZn-rhCTB9mIOtNzvnvZGWbahz5hfEyt_FH0DKDwiCrIE7jQBb7SH1k0Ev4CJl-f5_L0EzjdNMqvB1G79fPGqFP_f1o1DeeFDnuejhXwTWPedFB39DmZBSvwFQwaSsOE86I7MZLm77Xv2y3VkzjmBtXRoqkV5ykvdGibDjlIlQVK1fyP_uy41U-9KlrwAGZZAYMVdtHNplJ5wkRisGqHkcCJmeu66cXuy7Y6e_1TY9KrEA4GnJ7t76WeyX6INm4eTngc1RvQIHCvSixCSzlwfFioC-hrLA7EcX8AE6Lb795QF4AQDiAWOy9CsU5AGAaAGTYAH-pmhnQKoB6a-G6gHzM6xAqgH89EbqAeW2BuoB6qbsQKoB47OG6gHk9gbqAfw4BuoB-6WsQKoB_6esQKoB6--sQKoB9XJG6gH2baxAqgHmgaoB_-esQKoB9-fsQKoB_jCsQKoB_vCsQKoB-fXsQLYBwDSCC8IgGEQARidATIIioKAgICAgAg6DYBAgMCAgICAqIACqANIvf3BOliXjIbi2cSQA_IIG2FkeC1zdWJzeW4tMzUyMDYxNzM0MTY2NTU5MoAKA5gLAcgLAYAMAaoNAklO4g0TCNjmhuLZxJADFTy_SwUdp8AxjuoNEwjN4ofi2cSQAxU8v0sFHafAMY7wDQGIDv___________wGwE8ylgh_YEw3YFAHQFQHKFgIKAPgWAYAXAbIXDhgCKgo2MTY4NTc2NTA1qhgXCQAAAAAgS_5AEgo2MTY4NTc2NTA1GAGyGAkSAvpTGE0iAQDQGQE%26ae%3D1%26num%3D1%26cid%3DCAQSoAEAwksa0VKjEVyLc7KVhSUy7i4itB9RaroorjzGhfewegu45ZPbkCSGLVVbepo3fo0zzcJ5d3DDVHXdNy4Wuk_sOHTPF7rV4wCFTSVEEd0Jqui4pBJq-_i_ZttMaFejiVktCr9rALVjPwrV-UUJpylz_m_wZWx08LEwMHQvyIOEc8jupk8qy3DQdBBA2ysIN_vvKHcs2iXPb1nI2NPVlNoOGAE%26sig%3DAOD64_2PBkpJ36mWTdVtiMR-ZHtkdpthLw%26client%3Dca-pub-4573231550355221%26dbm_c%3DAKAmf-DbtdARxxtFTH4fCZngyXAeHRIyBJyWPs7Zoxz--4-tVvenQvgOu8P15DZXCS6ugCIK6Q3Tsuno1rX1A_Tvh7Y030SXRSEKMTOQTEv6l7naHD8yVqW0JbbiU9Sox5MldsGiPtdKyhtLEMo1LmWJ9fTOL0MQym9ksIIAVQtBPjR7FsUybs88SWwqHSoddXW6p_gQ-WDxFVLdkXUI165ytvQl16Ojw24w0MQHGpo6SvbqawN-wa4rxEMRA7DW7qqEPa5UCobZFR9WFEqXvmTa0wVrSVJxJs7B8OOR7iM9ZllIYxuvfn0%26cry%3D1%26dbm_d%3DAKAmf-AT4sY7sz1XFCwk2Zn670DK5LkUjphDn1DnyzBB2DMJFgv0jLtJj-u0EEgOuIO1ufQQeqeOT2q4vwWqiruG_r3mAp0RdnnzT-56WdDdOYfoEFibVnCQuPBT8Wuv0dT6z3lX-_nUjcYAu0vGCgsCNsmI8fjVU_bad-9Bg5KWaV6qtOHXpf18mjtUZVGa7AD5lAp3_ksCRfgMl_jv5k8s8xQyHPboFK3mpz3ypYD2JlbbtsnLkBkPWWIgI9-QQGZoKScOQceY8VpVBxnLwOqS7tUrRWAC_6kb-MGXLbVjAQPNbBaZrAsceZ6m1vR2so5NHuSyartfOR4Y8U5tVt6xq2fKfI64V-GXUyUWmS-03DbeQm7cYdqQ9oB1Guov-AKifG9aB9ISqYLdYyhXDrlRuEba7DAwQHZmQlK7Jj2EiJ9aDsVlV49dfEQ677SCSorn9_fWRdo1_xeF8bZJ_t2jcBbLf15pAhoy3_CRs9K_6Gj5ueRVMPOpNx59aF8Oye7WvdesxSZxNeiF5sVdoxROAR6xJAnHh4YuM6TydeLCh2UodZwb1J9P6SWYJEZ77x_ors8creIzX8mKSLokjvgUbzqX9lmZTYveDrpuGX2JT31xKLza3Vep63vOkyJgreN1YPF5H-1naHe_eykwGGnov8ET_kGnSqv-evwJ_bv2wrxVPKpohRfKiK7XJz9yEvbQf72RWrpd%26adurl%3Dhttps://careers.unitedhealthgroup.com/job-search-results/%253Fkeyword%253D%252523Exetech%2526location%253DIndia%2526country%253DIN%2526radius%253D25%2526src%253DUNS-19967%2526utm_source%253Dyoptima.com%2526utm_medium%253Ddisplay%2526utm_campaign%253DIndia%2526utm_content%253Dniche_site%2526utm_term%253D427790488%2526ss%253Dpaid%2526dclid%253D%2525edclid!%2526gad_source%253D7
+                - img "Advertisement" [ref=f3e20]
+      - generic [ref=e156]:
+        - img "Build PlayWright tests with AI" [ref=e158] [cursor=pointer]
+        - iframe [ref=e161]:
+          
+    - contentinfo [ref=e162]:
+      - generic [ref=e163]: © 2013-2020 TOOLSQA.COM | ALL RIGHTS RESERVED.
+```

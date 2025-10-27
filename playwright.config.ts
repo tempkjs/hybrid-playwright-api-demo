@@ -10,6 +10,7 @@ export default defineConfig({
     ["allure-playwright"]                         // Allure analytics
   ],
   use: {
+    channel: 'chrome',
     headless: true,
     screenshot: "only-on-failure",
     trace: "on-first-retry",
