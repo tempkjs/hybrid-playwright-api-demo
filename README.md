@@ -7,17 +7,19 @@ Enterprise-grade hybrid test automation framework integrating UI, API, and conta
 This project showcases a scalable hybrid test automation architecture built for real-world DevOps and cloud environments (e.g., SIDGS × Google Cloud).
 It combines Playwright for UI automation, Axios for API validation, and Docker for reproducible test runs — all tied together with Allure + Playwright HTML reports and optional Slack notifications.
 
-✅ Key Highlights
-Capability	Description
-🎭 UI Automation	Playwright + TypeScript with Page Object Model
-🌐 API Testing	Axios + TypeScript for REST endpoints
-⚙️ Config Management	.env + dotenv for environment isolation
-🧩 Reporting	Playwright HTML + Allure dashboards
-🐳 Containerization	Dockerized test runner for CI/CD
-🔔 Notifications	Slack webhook summary on completion
-☁️ CI/CD Ready	Jenkins + GitHub Actions integration
-🧩 Framework Structure (click to expand)
+## ✅ Key Highlights
 
+**Capability Description**
+
+- 🎭 **UI Automation:** Playwright + TypeScript with Page Object Model  
+- 🌐 **API Testing:** Axios + TypeScript for REST endpoints  
+- ⚙️ **Config Management:** `.env` + dotenv for environment isolation  
+- 🧩 **Reporting:** Playwright HTML + Allure dashboards  
+- 🐳 **Containerization:** Dockerized test runner for CI/CD  
+- 🔔 **Notifications:** Slack webhook summary on completion  
+- ☁️ **CI/CD Ready:** Jenkins + GitHub Actions integration
+   
+🧱 **Framework Structure:** 
 ```text
 src/
  ├── api/
