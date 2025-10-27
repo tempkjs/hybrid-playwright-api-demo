@@ -36,17 +36,17 @@ src/
 
 ⚙️ Setup Instructions
 🧰 Prerequisites
-Node ≥ 18
-npm (or yarn)
-Docker (optional for containerized runs)
+- Node ≥ 18
+- npm (or yarn)
+- Docker (optional for containerized runs)
 
 1️⃣ Clone the Repository
-git clone https://github.com/<your-username>/hybrid-playwright-api.git
-cd hybrid-playwright-api
+- git clone https://github.com/<your-username>/hybrid-playwright-api.git
+- cd hybrid-playwright-api
 
 2️⃣ Install Dependencies
-npm ci
-npx playwright install
+- npm ci
+- npx playwright install
 
 3️⃣ Configure Environment
 Create a .env file in the project root:
@@ -55,8 +55,8 @@ Create a .env file in the project root:
 - SLACK_WEBHOOK_URL=   # optional
 
 ▶️ Running Tests Locally
-Run All Tests
-npx playwright test
+- Run All Tests
+  - npx playwright test
 
 Run Specific Suites
 # API tests
@@ -78,39 +78,26 @@ Execute Tests in Container
   hybrid-playwright-api
 
 View Report Locally
-npx playwright show-report
+- npx playwright show-report
 
 📊 Allure Reporting (Advanced)
-
 Generate a comprehensive analytics dashboard.
-
 # Generate Allure report
-allure generate allure-results --clean -o allure-report
-
+- allure generate allure-results --clean -o allure-report
 # Open dashboard
-allure open allure-report
+- allure open allure-report
 
 
 Allure Includes:
-
-Pass/fail analytics
-
-Historical trends
-
-Step-by-step logs & attachments
-
-Screenshots + trace files
+- Pass/fail analytics
+- Historical trends
+- Step-by-step logs & attachments
+- Screenshots + trace files
 
 🔔 Slack Notifications (Optional)
-
-Create a Slack Incoming Webhook and copy the URL.
-
-Add it to .env:
-
-SLACK_WEBHOOK_URL=https://hooks.slack.com/services/XXXX/XXXX/XXXX
-
-
-The globalTeardown.ts automatically posts test-run summaries to Slack after execution.
+- Create a Slack Incoming Webhook and copy the URL.
+- Add it to .env: SLACK_WEBHOOK_URL=https://hooks.slack.com/services/XXXX/XXXX/XXXX
+- The globalTeardown.ts automatically posts test-run summaries to Slack after execution.
 
 ### ☁️ CI/CD Integration
 
@@ -154,24 +141,18 @@ Both pipelines:
 Playwright HTML Report
 
 Allure Dashboard
-
 🧠 Future Enhancements
-
 🤖 AI-driven selector self-healing
-
 📈 Grafana + InfluxDB metrics export
-
 ☁️ GCP Cloud Build integration
-
 🔧 API mocking / service virtualization layer
 
 👨‍💻 Author
-
 Kunal Jor
 Delivery Lead | SDET Architect | QA Transformation Specialist (18+ years)
 
 📧 kunaljor83@gmail.com
-🌐 LinkedIn Profile
+🌐 [LinkedIn Profile](https://www.linkedin.com/in/careerevangelistkjor/)
 
 🏁 Summary
 | Capability    | Status | Description                   |
