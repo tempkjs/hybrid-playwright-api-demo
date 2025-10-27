@@ -171,5 +171,15 @@ Kunal Jor
 Delivery Lead | SDET Architect | QA Transformation Specialist (18+ years)
 
 📧 kunaljor83@gmail.com
-
 🌐 LinkedIn Profile
+
+🏁 Summary
+| Capability    | Status | Description                   |
+| ------------- | ------ | ----------------------------- |
+| UI Testing    | ✅      | Playwright + TypeScript (POM) |
+| API Testing   | ✅      | Axios REST client             |
+| Config Mgmt   | ✅      | `.env` + dotenv               |
+| Reporting     | ✅      | Playwright + Allure           |
+| CI/CD Ready   | ✅      | GitHub Actions + Jenkins      |
+| Containerized | ✅      | Docker runtime                |
+| Notifications | ✅      | Slack webhook                 |
