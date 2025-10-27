@@ -53,25 +53,32 @@ jobs:
           path: allure-results
           if-no-files-found: warn
 
+        # ✅ Generate Allure HTML report
+      - name: 🧩 Generate Allure report
+        if: always()
+        run: |
+         if [ -d "allure-results" ]; then
+         npx allure generate allure-results --clean -o allure-report
+         else
+         echo "⚠️ No allure-results folder found, skipping generation"
+         fi
+
+  # ✅ Copy both reports for GitHub Pages
+      - name: 📦 Copy reports for Pages
+        if: always()
+        run: |
+         mkdir -p reports/latest
+         mkdir -p reports/allure
+         if [ -d "playwright-report" ]; then cp -r playwright-report/* reports/latest/; fi
+         if [ -d "allure-report" ]; then cp -r allure-report/* reports/allure/; fi
+
+  # ✅ Publish to GitHub Pages
       - name: 🌐 Publish Playwright report to GitHub Pages
         if: always()
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_branch: gh-pages
-          publish_dir: playwright-report
+          publish_dir: reports
           destination_dir: .
           keep_files: true
-
-      - name: 🗂️ Copy Reports for Pages
-        if: always()
-        run: |
-          mkdir -p reports/latest
-          mkdir -p reports/allure
-          cp -r playwright-report/* reports/latest/
-          cp -r allure-report/* reports/allure/
-          git add reports
-          git config user.name "github-actions"
-          git config user.email "github-actions@github.com"
-          git commit -m "Add Playwright & Allure reports"
-          git push
