@@ -18,6 +18,7 @@ Capability	Description
 ☁️ CI/CD Ready	Jenkins + GitHub Actions integration
 🧩 Framework Structure (click to expand)
 <details>
+```text
 src/
  ├── api/
  │   ├── clients/         → Axios clients for REST APIs
@@ -29,6 +30,7 @@ src/
  │
  ├── config/              → Environment config (.env + testConfig.ts)
  └── utils/               → Shared utilities (Slack, data, metrics)
+ ```
 </details>
 
 ⚙️ Setup Instructions
