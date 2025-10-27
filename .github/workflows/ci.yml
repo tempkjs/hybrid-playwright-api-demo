@@ -61,3 +61,4 @@ jobs:
           publish_branch: gh-pages
           publish_dir: playwright-report
           destination_dir: reports/latest
+          keep_files: true
