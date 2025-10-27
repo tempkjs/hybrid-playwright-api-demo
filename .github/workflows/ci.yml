@@ -27,11 +27,12 @@ jobs:
       - name: 🎭 Install Playwright Browsers
         run: npx playwright install --with-deps
 
-      - name: ⚙️ Run Playwright + Axios tests
+      - name: ⚙️ Run Playwright + Axios tests (HTML + Allure)
         env:
           BASE_URL_UI: https://demoqa.com
           BASE_URL_API: https://jsonplaceholder.typicode.com
-        run: npx playwright test --reporter=list
+        run: |
+          npx playwright test --reporter=html,line,allure-playwright
 
       - name: 📊 Upload Playwright HTML report
         if: always()
