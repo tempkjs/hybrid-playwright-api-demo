@@ -60,5 +60,18 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_branch: gh-pages
           publish_dir: playwright-report
-          destination_dir: reports/latest
+          destination_dir: .
           keep_files: true
+
+      - name: 🗂️ Copy Reports for Pages
+        if: always()
+        run: |
+          mkdir -p reports/latest
+          mkdir -p reports/allure
+          cp -r playwright-report/* reports/latest/
+          cp -r allure-report/* reports/allure/
+          git add reports
+          git config user.name "github-actions"
+          git config user.email "github-actions@github.com"
+          git commit -m "Add Playwright & Allure reports"
+          git push
