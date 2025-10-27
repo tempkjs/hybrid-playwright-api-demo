@@ -1,113 +1,212 @@
-name: Hybrid Playwright API CI
+name: Hybrid Playwright API CI (parallel suites, per-suite latest + archive)
 
 on:
   push:
     branches: [ main ]
   pull_request:
-    branches: [ main ]
 
 jobs:
-  test:
-    name: Run Playwright + API Tests
+  api-tests:
+    name: API tests
     runs-on: ubuntu-latest
-
     steps:
-      - name: 🧩 Checkout repository
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-      - name: 🧰 Set up Node.js
-        uses: actions/setup-node@v4
+      - uses: actions/setup-node@v4
         with:
           node-version: 20
-          cache: "npm"
 
-      - name: 📦 Install dependencies
+      - name: Install dependencies
         run: npm ci
 
-      - name: 🎭 Install Playwright Browsers
-        run: npx playwright install --with-deps
-      
-      - name: 📦 Install Allure CLI
-        run: npm install --save-dev allure-playwright allure-commandline
-
-
-      - name: ⚙️ Run Playwright + Axios tests (HTML + Allure)
-        env:
-          BASE_URL_UI: https://demoqa.com
-          BASE_URL_API: https://jsonplaceholder.typicode.com
+      - name: Run API tests (Playwright)
         run: |
-          npx playwright test --reporter=html,line,allure-playwright
+          # run only api specs (adjust path as needed)
+          npx playwright test "src/api/tests" --reporter=list,html
+          # if you're using allure-playwright reporter, ensure it's configured
 
-        # ✅ Upload reports as artifacts (optional backup)
-      - name: 📦 Upload Playwright HTML report
+      - name: Upload API Playwright HTML report
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: playwright-report
+          name: api-playwright-report
           path: playwright-report
           if-no-files-found: warn
 
-      - name: 📦 Upload Allure results
+      - name: Upload API Allure results
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: allure-results
+          name: api-allure-results
           path: allure-results
           if-no-files-found: warn
 
-        # ✅ Generate Allure report
-      - name: 🧩 Generate Allure HTML
-        if: always()
+  ui-tests:
+    name: UI tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run UI tests (Playwright)
         run: |
-         echo "Generating Allure report..."
-         if [ -d "allure-results" ]; then
-         npx allure generate allure-results --clean -o allure-report
-         echo "✅ Allure report generated at allure-report/"
-         else
-         echo "⚠️ No allure-results folder found, skipping"
-         fi
+          # run only ui specs (adjust path as needed)
+          npx playwright test "src/ui/tests" --reporter=list,html
 
-      - name: 🗂️ Prepare reports (with timestamped archive)
+      - name: Upload UI Playwright HTML report
         if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ui-playwright-report
+          path: playwright-report
+          if-no-files-found: warn
+
+      - name: Upload UI Allure results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ui-allure-results
+          path: allure-results
+          if-no-files-found: warn
+
+  publish-reports:
+    name: Merge & publish reports (needs: api-tests, ui-tests)
+    runs-on: ubuntu-latest
+    needs: [ api-tests, ui-tests ]
+    if: always()
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Download artifacts from other jobs
+        uses: actions/download-artifact@v4
+        with:
+          path: ./artifacts
+
+      - name: Create working dirs
         run: |
-         rm -rf reports
-         mkdir -p reports/latest
-         mkdir -p reports/allure
+          rm -rf work
+          mkdir -p work/playwright/api work/playwright/ui work/allure/api work/allure/ui
+          mkdir -p reports/latest reports/latest/api reports/latest/ui reports/allure
+          mkdir -p reports/archive
 
-   
-         TS=$(date -u +"%Y-%m-%dT%H%MZ")
-         ARCHIVE_DIR="reports/archive/$TS"
-         mkdir -p "$ARCHIVE_DIR/playwright"
-         mkdir -p "$ARCHIVE_DIR/allure"
+      - name: Unpack Playwright artifacts (per-suite)
+        run: |
+          # api-playwright-report -> work/playwright/api
+          if [ -d "artifacts/api-playwright-report" ]; then
+            cp -r artifacts/api-playwright-report/* work/playwright/api/ || true
+          else
+            echo "⚠️ api-playwright-report artifact missing"
+          fi
 
-         echo "Timestamp for this run: $TS"
+          # ui-playwright-report -> work/playwright/ui
+          if [ -d "artifacts/ui-playwright-report" ]; then
+            cp -r artifacts/ui-playwright-report/* work/playwright/ui/ || true
+          else
+            echo "⚠️ ui-playwright-report artifact missing"
+          fi
 
-         if [ -d "playwright-report" ]; then
-          echo "Copying Playwright report..."
-         cp -r playwright-report/* reports/latest/
-         cp -r playwright-report/* "$ARCHIVE_DIR/playwright/"
-         else
-          echo "⚠️ No playwright-report found."
-         fi
+      - name: Unpack Allure artifacts (per-suite)
+        run: |
+          if [ -d "artifacts/api-allure-results" ]; then
+            cp -r artifacts/api-allure-results/* work/allure/api/ || true
+          else
+            echo "⚠️ api-allure-results missing"
+          fi
 
-         if [ -d "allure-report" ]; then
-          echo "Copying Allure report..."
-         cp -r allure-report/* reports/allure/
-         cp -r allure-report/* "$ARCHIVE_DIR/allure/"
-         else
-          echo "⚠️ No allure-report found."
-         fi
+          if [ -d "artifacts/ui-allure-results" ]; then
+            cp -r artifacts/ui-allure-results/* work/allure/ui/ || true
+          else
+            echo "⚠️ ui-allure-results missing"
+          fi
 
-         echo "✅ Reports prepared and archived under $ARCHIVE_DIR"
+      - name: Generate per-suite Allure HTML (if results exist)
+        run: |
+          # api
+          if [ -d "work/allure/api" ] && [ "$(ls -A work/allure/api 2>/dev/null)" ]; then
+            npx allure generate work/allure/api --clean -o work/allure/api-html
+            echo "Generated Allure HTML for API at work/allure/api-html"
+          else
+            echo "No Allure results for API"
+          fi
 
+          # ui
+          if [ -d "work/allure/ui" ] && [ "$(ls -A work/allure/ui 2>/dev/null)" ]; then
+            npx allure generate work/allure/ui --clean -o work/allure/ui-html
+            echo "Generated Allure HTML for UI at work/allure/ui-html"
+          else
+            echo "No Allure results for UI"
+          fi
 
-        # ✅ Publish both reports to GitHub Pages
-      - name: 🌐 Publish to GitHub Pages
-        if: always()
+      - name: Build reports/latest per-suite + combined
+        run: |
+          # copy per-suite Playwright HTML into reports/latest/<suite>/
+          if [ -d "work/playwright/api" ]; then
+            mkdir -p reports/latest/api
+            cp -r work/playwright/api/* reports/latest/api/ || true
+          fi
+          if [ -d "work/playwright/ui" ]; then
+            mkdir -p reports/latest/ui
+            cp -r work/playwright/ui/* reports/latest/ui/ || true
+          fi
+
+          # -- optional: also create a combined "latest" root by merging both (flatten)
+          mkdir -p reports/latest/combined
+          cp -r reports/latest/api/* reports/latest/combined/ 2>/dev/null || true
+          cp -r reports/latest/ui/* reports/latest/combined/ 2>/dev/null || true
+
+          # copy per-suite Allure HTML into reports/allure/<suite>/
+          if [ -d "work/allure/api-html" ]; then
+            mkdir -p reports/allure/api
+            cp -r work/allure/api-html/* reports/allure/api/ || true
+          fi
+          if [ -d "work/allure/ui-html" ]; then
+            mkdir -p reports/allure/ui
+            cp -r work/allure/ui-html/* reports/allure/ui/ || true
+          fi
+
+          # Optionally produce a merged Allure (run-level) report by combining results first
+          mkdir -p temp/allure-merged-results
+          # copy raw allure-result files (if available) and then generate combined
+          if [ -d "work/allure/api" ]; then cp -r work/allure/api/* temp/allure-merged-results/ || true; fi
+          if [ -d "work/allure/ui" ]; then cp -r work/allure/ui/* temp/allure-merged-results/ || true; fi
+
+          if [ -d "temp/allure-merged-results" ] && [ "$(ls -A temp/allure-merged-results 2>/dev/null)" ]; then
+            npx allure generate temp/allure-merged-results --clean -o reports/allure/merged || true
+            echo "Generated merged Allure at reports/allure/merged"
+          else
+            echo "No combined Allure results to generate merged Allure"
+          fi
+
+      - name: Archive this run (timestamped)
+        run: |
+          TS=$(date -u +"%Y-%m-%dT%H%MZ")
+          ARCH_DIR="reports/archive/$TS"
+          mkdir -p "$ARCH_DIR/playwright/api" "$ARCH_DIR/playwright/ui" "$ARCH_DIR/allure/api" "$ARCH_DIR/allure/ui"
+          # copy what we have
+          cp -r reports/latest/api/* "$ARCH_DIR/playwright/api/" 2>/dev/null || true
+          cp -r reports/latest/ui/* "$ARCH_DIR/playwright/ui/" 2>/dev/null || true
+          cp -r reports/allure/api/* "$ARCH_DIR/allure/api/" 2>/dev/null || true
+          cp -r reports/allure/ui/* "$ARCH_DIR/allure/ui/" 2>/dev/null || true
+          echo "Archived run to $ARCH_DIR"
+
+      - name: List reports tree (debug)
+        run: |
+          echo "==== reports tree ===="
+          ls -la reports || true
+          ls -la reports/latest || true
+          ls -la reports/allure || true
+          ls -la reports/archive || true
+
+      - name: Publish to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_branch: gh-pages
           publish_dir: reports
           keep_files: true
-          force_orphan: false
