@@ -129,14 +129,14 @@ jobs:
       - name: Generate per-suite Allure HTML (if results exist)
         run: |
           if [ -d "work/allure/api" ] && [ "$(ls -A work/allure/api 2>/dev/null)" ]; then
-          npx -p allure-commandline@2.13.10 allure generate work/allure/api --clean -o work/allure/api-html
+          npx -p allure-commandline@latest allure generate work/allure/api --clean -o work/allure/api-html
           echo "Generated Allure HTML for API at work/allure/api-html"
           else
           echo "No Allure results for API"
           fi
 
           if [ -d "work/allure/ui" ] && [ "$(ls -A work/allure/ui 2>/dev/null)" ]; then
-          npx -p allure-commandline@2.13.10 allure generate work/allure/api --clean -o work/allure/api-html
+          npx -p allure-commandline@latest allure generate work/allure/ui --clean -o work/allure/ui-html
           echo "Generated Allure HTML for UI at work/allure/ui-html"
           else
           echo "No Allure results for UI"
