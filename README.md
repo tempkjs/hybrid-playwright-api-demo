@@ -35,10 +35,10 @@ src/
  ```
 
 ⚙️ Setup Instructions
-🧰 Prerequisites
-- Node ≥ 18
-- npm (or yarn)
-- Docker (optional for containerized runs)
+- 🧰 Prerequisites
+   - Node ≥ 18
+   - npm (or yarn)
+   - Docker (optional for containerized runs)
 
 1️⃣ Clone the Repository
 - git clone https://github.com/<your-username>/hybrid-playwright-api.git
