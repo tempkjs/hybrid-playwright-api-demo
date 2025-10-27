@@ -26,6 +26,10 @@ jobs:
 
       - name: 🎭 Install Playwright Browsers
         run: npx playwright install --with-deps
+      
+      - name: 📦 Install Allure CLI
+        run: npm install --save-dev allure-playwright allure-commandline
+
 
       - name: ⚙️ Run Playwright + Axios tests (HTML + Allure)
         env:
@@ -47,4 +51,4 @@ jobs:
         with:
           name: allure-results
           path: allure-results
-          if-no-files-found: ignore
+          if-no-files-found: warn
