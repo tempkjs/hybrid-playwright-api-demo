@@ -60,7 +60,7 @@ jobs:
       - name: Run UI tests (Playwright)
         run: |
           # run only ui specs (adjust path as needed)
-          npx playwright test "src/ui/tests" --reporter=list,html
+          npx playwright test "src/ui/tests" --reporter=list,html,allure-playwright
 
       - name: Upload UI Playwright HTML report
         if: always()
