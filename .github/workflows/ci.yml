@@ -52,3 +52,10 @@ jobs:
           name: allure-results
           path: allure-results
           if-no-files-found: warn
+
+      - name: 🧾 Post summary
+        if: always()
+        run: |
+          echo "### ✅ Playwright Report" >> $GITHUB_STEP_SUMMARY
+          echo "[View HTML report artifact](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }})" >> $GITHUB_STEP_SUMMARY
+
