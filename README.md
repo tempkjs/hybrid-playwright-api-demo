@@ -16,7 +16,8 @@ Capability	Description
 🐳 Containerization	Dockerized test runner for CI/CD
 🔔 Notifications	Slack webhook summary on completion
 ☁️ CI/CD Ready	Jenkins + GitHub Actions integration
-🧩 Framework Structure
+🧩 Framework Structure (click to expand)
+<details>
 src/
  ├── api/
  │   ├── clients/         → Axios clients for REST APIs
@@ -28,6 +29,7 @@ src/
  │
  ├── config/              → Environment config (.env + testConfig.ts)
  └── utils/               → Shared utilities (Slack, data, metrics)
+</details>
 
 ⚙️ Setup Instructions
 🧰 Prerequisites
