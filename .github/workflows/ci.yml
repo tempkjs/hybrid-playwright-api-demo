@@ -67,32 +67,39 @@ jobs:
          echo "⚠️ No allure-results folder found, skipping"
          fi
 
-        # ✅ Prepare both reports for GitHub Pages
-      - name: 🗂️ Prepare combined reports folder
+      - name: 🗂️ Prepare reports (with timestamped archive)
         if: always()
         run: |
          rm -rf reports
          mkdir -p reports/latest
          mkdir -p reports/allure
 
-         echo "Copying Playwright report..."
+   
+         TS=$(date -u +"%Y-%m-%dT%H%MZ")
+         ARCHIVE_DIR="reports/archive/$TS"
+         mkdir -p "$ARCHIVE_DIR/playwright"
+         mkdir -p "$ARCHIVE_DIR/allure"
+
+         echo "Timestamp for this run: $TS"
+
          if [ -d "playwright-report" ]; then
+          echo "Copying Playwright report..."
          cp -r playwright-report/* reports/latest/
+         cp -r playwright-report/* "$ARCHIVE_DIR/playwright/"
          else
-          echo "⚠️ No playwright-report folder found!"
+          echo "⚠️ No playwright-report found."
          fi
 
-         echo "Copying Allure report..."
          if [ -d "allure-report" ]; then
+          echo "Copying Allure report..."
          cp -r allure-report/* reports/allure/
-         if [ -f "reports/allure/index.html" ]; then
-          echo "✅ Allure HTML index confirmed"
+         cp -r allure-report/* "$ARCHIVE_DIR/allure/"
          else
-          echo "⚠️ Allure report missing index.html"
+          echo "⚠️ No allure-report found."
          fi
-         else
-          echo "⚠️ No allure-report folder found!"
-         fi
+
+         echo "✅ Reports prepared and archived under $ARCHIVE_DIR"
+
 
         # ✅ Publish both reports to GitHub Pages
       - name: 🌐 Publish to GitHub Pages
