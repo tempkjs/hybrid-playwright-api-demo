@@ -22,7 +22,7 @@ jobs:
       - name: Run API tests (Playwright)
         run: |
           # run only api specs (adjust path as needed)
-          npx playwright test "src/api/tests" --reporter=list,html
+          npx playwright test "src/api/tests" --reporter=list,html,allure-playwright
           # if you're using allure-playwright reporter, ensure it's configured
 
       - name: Upload API Playwright HTML report
@@ -53,6 +53,9 @@ jobs:
 
       - name: Install dependencies
         run: npm ci
+
+      - name: Install Playwright browsers
+        run: npx playwright install --with-deps
 
       - name: Run UI tests (Playwright)
         run: |
