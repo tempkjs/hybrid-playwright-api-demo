@@ -36,11 +36,8 @@ src/
 
 ⚙️ Setup Instructions
 🧰 Prerequisites
-
 Node ≥ 18
-
 npm (or yarn)
-
 Docker (optional for containerized runs)
 
 1️⃣ Clone the Repository
@@ -52,12 +49,10 @@ npm ci
 npx playwright install
 
 3️⃣ Configure Environment
-
 Create a .env file in the project root:
-
-BASE_URL_UI=https://demoqa.com
-BASE_URL_API=https://jsonplaceholder.typicode.com
-SLACK_WEBHOOK_URL=   # optional
+- BASE_URL_UI=https://demoqa.com
+- BASE_URL_API=https://jsonplaceholder.typicode.com
+- SLACK_WEBHOOK_URL=   # optional
 
 ▶️ Running Tests Locally
 Run All Tests
@@ -65,20 +60,20 @@ npx playwright test
 
 Run Specific Suites
 # API tests
-npx playwright test src/api/tests/userApi.spec.ts
+- npx playwright test src/api/tests/userApi.spec.ts
 
 # UI tests
-npx playwright test src/ui/tests/login.spec.ts
+- npx playwright test src/ui/tests/login.spec.ts
 
 View HTML Report
-npx playwright show-report
+- npx playwright show-report
 
 🐳 Running in Docker
 Build the Docker Image
-docker build -t hybrid-playwright-api .
+- docker build -t hybrid-playwright-api .
 
 Execute Tests in Container
-docker run --rm \
+- docker run --rm \
   -v $(pwd)/playwright-report:/usr/src/app/playwright-report \
   hybrid-playwright-api
 
