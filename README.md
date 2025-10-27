@@ -153,8 +153,8 @@ Both pipelines:
 - 🔧 API mocking / service virtualization layer
 
 👨‍💻 Author
-Kunal Jor
-Delivery Lead | SDET Architect | QA Transformation Specialist (18+ years)
+- ** Kunal Jor **
+- ** Delivery Lead | SDET Architect | QA Transformation Specialist (18+ years)**
 
 📧 kunaljor83@gmail.com
 🌐 [LinkedIn Profile](https://www.linkedin.com/in/careerevangelistkjor/)
