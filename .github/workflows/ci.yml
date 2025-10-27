@@ -38,7 +38,8 @@ jobs:
         run: |
           npx playwright test --reporter=html,line,allure-playwright
 
-      - name: 📊 Upload Playwright HTML report
+        # ✅ Upload reports as artifacts (optional backup)
+      - name: 📦 Upload Playwright HTML report
         if: always()
         uses: actions/upload-artifact@v4
         with:
@@ -46,7 +47,7 @@ jobs:
           path: playwright-report
           if-no-files-found: warn
 
-      - name: 📈 Upload Allure results (if present)
+      - name: 📦 Upload Allure results
         if: always()
         uses: actions/upload-artifact@v4
         with:
@@ -54,33 +55,52 @@ jobs:
           path: allure-results
           if-no-files-found: warn
 
-        # ✅ Generate Allure HTML report
-      - name: 🧩 Generate Allure report
+        # ✅ Generate Allure report
+      - name: 🧩 Generate Allure HTML
         if: always()
         run: |
+         echo "Generating Allure report..."
          if [ -d "allure-results" ]; then
          npx allure generate allure-results --clean -o allure-report
+         echo "✅ Allure report generated at allure-report/"
          else
-         echo "⚠️ No allure-results folder found, skipping generation"
+         echo "⚠️ No allure-results folder found, skipping"
          fi
 
-  # ✅ Copy both reports for GitHub Pages
-      - name: 📦 Copy reports for Pages
+        # ✅ Prepare both reports for GitHub Pages
+      - name: 🗂️ Prepare combined reports folder
         if: always()
         run: |
          rm -rf reports
          mkdir -p reports/latest
          mkdir -p reports/allure
-         if [ -d "playwright-report" ]; then cp -r playwright-report/* reports/latest/; fi
-         if [ -d "allure-report" ]; then cp -r allure-report/* reports/allure/; fi
 
-  # ✅ Publish to GitHub Pages
-      - name: 🌐 Publish Playwright report to GitHub Pages
+         echo "Copying Playwright report..."
+         if [ -d "playwright-report" ]; then
+         cp -r playwright-report/* reports/latest/
+         else
+          echo "⚠️ No playwright-report folder found!"
+         fi
+
+         echo "Copying Allure report..."
+         if [ -d "allure-report" ]; then
+         cp -r allure-report/* reports/allure/
+         if [ -f "reports/allure/index.html" ]; then
+          echo "✅ Allure HTML index confirmed"
+         else
+          echo "⚠️ Allure report missing index.html"
+         fi
+         else
+          echo "⚠️ No allure-report folder found!"
+         fi
+
+        # ✅ Publish both reports to GitHub Pages
+      - name: 🌐 Publish to GitHub Pages
         if: always()
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_branch: gh-pages
           publish_dir: reports
-          destination_dir: .
           keep_files: true
+          force_orphan: false
