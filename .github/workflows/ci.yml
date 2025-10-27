@@ -44,6 +44,7 @@ jobs:
         with:
           name: playwright-report
           path: playwright-report
+          if-no-files-found: warn
 
       - name: 📈 Upload Allure results (if present)
         if: always()
@@ -67,6 +68,7 @@ jobs:
       - name: 📦 Copy reports for Pages
         if: always()
         run: |
+         rm -rf reports
          mkdir -p reports/latest
          mkdir -p reports/allure
          if [ -d "playwright-report" ]; then cp -r playwright-report/* reports/latest/; fi
