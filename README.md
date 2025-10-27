@@ -138,9 +138,11 @@ Both pipelines:
 - (Optionally) notify via Slack webhook 
 
 📈 Sample Dashboards
-Playwright HTML Report
+- Playwright HTML Report
+  <img width="1440" height="900" alt="Screenshot 2025-10-27 at 12 43 08 PM" src="https://github.com/user-attachments/assets/ef9df011-9965-4b2e-8605-39ccd41f6028" />
 
-Allure Dashboard
+
+- Allure Dashboard
 🧠 Future Enhancements
 🤖 AI-driven selector self-healing
 📈 Grafana + InfluxDB metrics export
