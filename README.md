@@ -143,11 +143,14 @@ Both pipelines:
 
 
 - Allure Dashboard
+  <img width="1439" height="835" alt="Screenshot 2025-10-27 at 1 17 05 PM" src="https://github.com/user-attachments/assets/dd62278c-d73c-4926-8e68-09bc54e21c57" />
+
+
 🧠 Future Enhancements
-🤖 AI-driven selector self-healing
-📈 Grafana + InfluxDB metrics export
-☁️ GCP Cloud Build integration
-🔧 API mocking / service virtualization layer
+- 🤖 AI-driven selector self-healing
+- 📈 Grafana + InfluxDB metrics export
+- ☁️ GCP Cloud Build integration
+- 🔧 API mocking / service virtualization layer
 
 👨‍💻 Author
 Kunal Jor
