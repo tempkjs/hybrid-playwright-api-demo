@@ -1,7 +1,7 @@
 import { test } from "@playwright/test";
 import { ProfilePage } from "../pages/profilePage";
 
-test.describe('@ui', () => {
+test.describe('@ui Profile', () => {
 test("UI – validate user profile after global login", async ({ page }) => {
   const profilePage = new ProfilePage(page);
   await profilePage.goto();
