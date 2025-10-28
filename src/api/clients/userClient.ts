@@ -7,6 +7,8 @@ const api = axios.create({
   headers: config.headers
 });
 
+console.log('UserClient initialized with base URL:', config.baseUrlAPI);
+
 export const UserClient = {
   async getUser(id: string) { return api.get(`/users/${id}`); },
   async createUser(data: any) { return api.post(`/users`, data); }

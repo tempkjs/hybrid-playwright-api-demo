@@ -1,53 +1,51 @@
-name: Hybrid Playwright Suites (Env + Packs Matrix)
+name: Run Playwright Packs
 
 on:
-  push:
-    branches: [ main ]
-  pull_request:
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: "Test Environment"
+        required: true
+        default: "qa"
+        type: choice
+        options:
+          - dev
+          - qa
+          - stage
+
+env:
+  ENV: ${{ github.event.inputs.environment }}
+  USER_EMAIL: ${{ secrets.USER_EMAIL }}
+  USER_PASSWORD: ${{ secrets.USER_PASSWORD }}
 
 jobs:
-  test-matrix:
-    name: Run Playwright Packs (${{ matrix.pack }} on ${{ matrix.env }})
-    runs-on: ubuntu-latest
-
+  test-packs:
     strategy:
-      fail-fast: false
       matrix:
-        env: [qa] # add dev, stage when needed
         pack: [api, ui, visual]
+
+    name: Run Playwright Packs (${{ matrix.pack }} on ${{ github.event.inputs.environment }})
+    runs-on: ubuntu-latest
 
     steps:
       - uses: actions/checkout@v4
+      
       - uses: actions/setup-node@v4
         with:
           node-version: 20
 
-      - name: Install dependencies
-        run: npm ci
+      - run: npm ci
 
-      - name: Install Playwright browsers
-        run: npx playwright install --with-deps
+      - run: npx playwright install --with-deps
 
       - name: Run tagged tests
         run: |
-          echo "Running ${{ matrix.pack }} pack on ${{ matrix.env }} env"
-          NODE_ENV=${{ matrix.env }} \
-          npx playwright test -g "@${{ matrix.pack }}" \
-            --config=src/config/playwright.config.ts \
-            --reporter=list,html,allure-playwright
+          echo "Running ${{ matrix.pack }} pack on ${{ env.ENV }} env"
+          npx playwright test --grep "@${{ matrix.pack }}"
 
-      - name: Upload Playwright HTML report
+      - name: Upload report artifacts
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: ${{ matrix.pack }}-playwright-report
+          name: ${{ matrix.pack }}-report
           path: playwright-report
-          if-no-files-found: warn
-
-      - name: Upload Allure results
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: ${{ matrix.pack }}-allure-results
-          path: allure-results
-          if-no-files-found: warn
