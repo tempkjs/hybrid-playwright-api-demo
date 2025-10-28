@@ -3,7 +3,11 @@ const ENV = process.env.NODE_ENV || "dev";
 dotenv.config({ path: `./src/config/env/${ENV}.env` });
 import { defineConfig } from "@playwright/test";
 
+const tag = process.env.TAG;
+console.log(`Running tests with tag: ${tag}`);
+
 export default defineConfig({
+  grep: tag ? new RegExp(tag) : undefined,
   globalSetup: "./globalSetup.ts",
   globalTeardown: "./globalTeardown.ts",
   testDir: "../",

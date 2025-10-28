@@ -6,9 +6,18 @@ async function globalSetup() {
 
     console.log("Following config is being used for global setup:", config)
 
+    const tag = process.env.TAG;
+
+    console.log(`Tag: ${tag}`);
+
+   if (tag === '@api') {
+    console.log('Skipping login as this is an API-only run.');
+    return;
+  }
+
+  else{
     const browser = await chromium.launch();
     const page = await browser.newPage();
-
 
     const baseURL = config.baseUrlUI;
     if (!baseURL) throw new Error("❌ BASE_URL not set!");
@@ -36,6 +45,7 @@ async function globalSetup() {
     console.log("✅ Auth state stored for reuse by UI tests.");
 
     await browser.close();
+}
 }
 
 export default globalSetup;
