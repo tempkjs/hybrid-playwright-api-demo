@@ -3,7 +3,16 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "test": "npx playwright test"
+    "test": "npx playwright test",
+    "ui:dev": "NODE_ENV=dev npx playwright test -g @ui --config=src/config/playwright.config.ts",
+    "ui:qa": "NODE_ENV=qa npx playwright test -g @ui --config=src/config/playwright.config.ts",
+    "ui:stage": "NODE_ENV=stage npx playwright test -g @ui --config=src/config/playwright.config.ts",
+    "api:dev": "NODE_ENV=dev npx playwright test -g @api --config=src/config/playwright.config.ts",
+    "api:qa": "NODE_ENV=qa npx playwright test -g @api --config=src/config/playwright.config.ts",
+    "api:stage": "NODE_ENV=stage npx playwright test -g @api --config=src/config/playwright.config.ts",
+    "visual:dev": "NODE_ENV=dev npx playwright test -g @visual --config=src/config/playwright.config.ts",
+    "visual:qa": "NODE_ENV=qa npx playwright test -g @visual --config=src/config/playwright.config.ts",
+    "visual:stage": "NODE_ENV=stage npx playwright test -g @visual --config=src/config/playwright.config.ts"
   },
   "keywords": [],
   "author": "",

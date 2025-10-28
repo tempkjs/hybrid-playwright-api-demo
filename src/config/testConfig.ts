@@ -1,5 +1,4 @@
-import dotenv from "dotenv";
-dotenv.config();
+
 
 export const config = {
   baseUrlUI: process.env.BASE_URL_UI || "https://demoqa.com",
