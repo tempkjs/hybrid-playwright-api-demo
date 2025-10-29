@@ -13,6 +13,13 @@ on:
           - qa
           - stage
 
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
 env:
   ENV: ${{ github.event.inputs.environment }}
 
