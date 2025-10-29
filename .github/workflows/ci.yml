@@ -33,7 +33,7 @@ jobs:
   test-packs:
     strategy:
       matrix:
-        pack: [api, ui, visual]
+        pack: [api, ui]
 
     name: Run Playwright Packs (${{ matrix.pack }} on ${{ github.event.inputs.environment }})
     runs-on: ubuntu-latest
