@@ -38,7 +38,6 @@ env:
 jobs:
   run-packs:
     runs-on: ubuntu-latest
-    if: ${{ github.event.inputs.tag == 'all' || github.event.inputs.tag == matrix.pack }}
     env:
       NODE_ENV: ${{ inputs.environment }}
       # If you use ReqRes, keep a default but allow override via repo/env secrets
