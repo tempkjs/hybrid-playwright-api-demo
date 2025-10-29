@@ -15,8 +15,12 @@ on:
 
 env:
   ENV: ${{ github.event.inputs.environment }}
-  USER_EMAIL: ${{ secrets.USER_EMAIL }}
-  USER_PASSWORD: ${{ secrets.USER_PASSWORD }}
+
+  BASE_URL_UI: ${{ secrets[format('{0}_BASE_URL_UI', github.event.inputs.environment)] }}
+  BASE_URL_API: ${{ secrets[format('{0}_BASE_URL_API', github.event.inputs.environment)] }}
+
+  USER_EMAIL: ${{ secrets[format('{0}_USER_EMAIL', github.event.inputs.environment)] }}
+  USER_PASSWORD: ${{ secrets[format('{0}_USER_PASSWORD', github.event.inputs.environment)] }}
 
 jobs:
   test-packs:
