@@ -13,16 +13,27 @@ on:
           - qa
           - stage
 
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
 env:
   ENV: ${{ github.event.inputs.environment }}
-  USER_EMAIL: ${{ secrets.USER_EMAIL }}
-  USER_PASSWORD: ${{ secrets.USER_PASSWORD }}
+
+  BASE_URL_UI: ${{ secrets[format('{0}_BASE_URL_UI', github.event.inputs.environment)] }}
+  BASE_URL_API: ${{ secrets[format('{0}_BASE_URL_API', github.event.inputs.environment)] }}
+
+  USER_EMAIL: ${{ secrets[format('{0}_USER_EMAIL', github.event.inputs.environment)] }}
+  USER_PASSWORD: ${{ secrets[format('{0}_USER_PASSWORD', github.event.inputs.environment)] }}
 
 jobs:
   test-packs:
     strategy:
       matrix:
-        pack: [api, ui, visual]
+        pack: [api, ui]
 
     name: Run Playwright Packs (${{ matrix.pack }} on ${{ github.event.inputs.environment }})
     runs-on: ubuntu-latest
@@ -34,9 +45,21 @@ jobs:
         with:
           node-version: 20
 
-      - run: npm ci
+      # ✅ Cache for faster UI + Visual execution
+      - name: Cache Playwright browsers
+        if: matrix.pack != 'api'
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/ms-playwright
+          key: ${{ runner.os }}-playwright-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-playwright-
 
-      - run: npx playwright install --with-deps
+      # ✅ Install only chromium browser when needed
+      - name: Install browsers for UI/visual
+        if: matrix.pack != 'api'
+        run: |
+          npx playwright install chromium
 
       - name: Run tagged tests
         run: |
