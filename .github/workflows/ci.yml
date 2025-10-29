@@ -12,6 +12,12 @@ on:
           - dev
           - qa
           - stage
+      tag:
+        description: "Test Tag"
+        required: true
+        default: "all"
+        type: choice
+        options: [all, api, ui, visual]
 
   push:
     branches:
