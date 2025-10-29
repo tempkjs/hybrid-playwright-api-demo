@@ -56,6 +56,9 @@ jobs:
         with:
           node-version: 20
 
+      - name: Install dependencies
+        run: npm ci
+        
       # ✅ Cache for faster UI + Visual execution
       - name: Cache Playwright browsers
         if: matrix.pack != 'api'
