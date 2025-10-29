@@ -39,9 +39,11 @@ jobs:
     strategy:
       fail-fast: false
       # If "all" -> matrix over api/ui/visual; else a single item matrix
-      matrix: ${{ fromJSON( inputs.tag == 'all'
-        && '{"pack":["api","ui","visual"]}'
-        || format('{"pack":["{0}"]}', inputs.tag) ) }}
+      matrix: ${{ fromJSON(
+        inputs.tag == 'all'
+          && '{"pack":["api","ui","visual"]}'
+          || format('{"pack":["{0}"]}', inputs.tag)
+       ) }}
 
     name: Run Playwright Packs (${{ matrix.pack }} on ${{ github.event.inputs.environment }})
 
@@ -70,7 +72,7 @@ jobs:
 
       - name: Run tagged tests
         env:
-          TAG: ${{ inputs.tag == 'api' && '@api' || inputs.tag == 'ui' && '@ui' || inputs.tag == 'visual' && '@visual' || '' }}
+          TAG: ${{ (matrix.pack == 'api' && '@api') || (matrix.pack == 'ui' && '@ui') || (matrix.pack == 'visual' && '@visual') || '' }}
           NODE_ENV: ${{ inputs.environment }}
         run: npx playwright test --config=src/config/playwright.config.ts
 
