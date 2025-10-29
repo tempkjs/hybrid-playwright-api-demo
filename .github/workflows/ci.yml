@@ -45,17 +45,21 @@ jobs:
         with:
           node-version: 20
 
-      - uses: actions/cache@v4
+      # ✅ Cache for faster UI + Visual execution
+      - name: Cache Playwright browsers
+        if: matrix.pack != 'api'
+        uses: actions/cache@v4
         with:
           path: ~/.cache/ms-playwright
-          key: ${{ runner.os }}-pw-${{ hashFiles('**/package-lock.json') }}
-          restore-keys: ${{ runner.os }}-pw-
+          key: ${{ runner.os }}-playwright-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-playwright-
 
-      - name: Install deps
-        run: npm ci
-
-      - name: Install browser dependencies
-        run: npx playwright install-deps
+      # ✅ Install only chromium browser when needed
+      - name: Install browsers for UI/visual
+        if: matrix.pack != 'api'
+        run: |
+          npx playwright install chromium
 
       - name: Run tagged tests
         run: |
