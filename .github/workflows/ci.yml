@@ -45,9 +45,17 @@ jobs:
         with:
           node-version: 20
 
-      - run: npm ci
+      - uses: actions/cache@v4
+        with:
+          path: ~/.cache/ms-playwright
+          key: ${{ runner.os }}-pw-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: ${{ runner.os }}-pw-
 
-      - run: npx playwright install --with-deps
+      - name: Install deps
+        run: npm ci
+
+      - name: Install browser dependencies
+        run: npx playwright install-deps
 
       - name: Run tagged tests
         run: |
