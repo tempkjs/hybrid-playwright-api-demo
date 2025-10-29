@@ -76,6 +76,17 @@ jobs:
         run: |
           npx playwright install chromium
 
+      - name: Validate environment configuration
+        run: |
+          echo "Selected environment: ${{ github.event.inputs.environment }}"
+    
+          if [ -z "$USER_EMAIL" ] || [ -z "$USER_PASSWORD" ]; then
+          echo "❌ Authentication secrets missing!"
+          exit 1
+          else
+          echo "✅ Authentication secrets loaded successfully"
+          fi
+
       - name: Run tagged tests
         env:
           TAG: ${{ (matrix.pack == 'api' && '@api') || (matrix.pack == 'ui' && '@ui') || (matrix.pack == 'visual' && '@visual') || '' }}
