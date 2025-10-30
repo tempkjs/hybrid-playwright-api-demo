@@ -43,7 +43,7 @@ jobs:
       NODE_ENV: ${{ inputs.environment }}
       USER_EMAIL: ${{ secrets.USER_EMAIL }}
       USER_PASSWORD: ${{ secrets.USER_PASSWORD }}
-      REQRES_API_KEY: ${{ secrets.REQRES_API_KEY || 'reqres-free-v1' }}
+      REQRES_API_KEY: ${{ secrets.REQRES_API_KEY }}
     strategy:
       fail-fast: false
       matrix: 
