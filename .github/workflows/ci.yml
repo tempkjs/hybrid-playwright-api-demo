@@ -37,7 +37,13 @@ env:
 
 jobs:
   run-packs:
+    strategy:
+      fail-fast: false
+      matrix:
+        pack: [api, ui, visual]
+
     if: ${{ github.event.inputs.tag == 'all' || github.event.inputs.tag == matrix.pack }}
+    
     runs-on: ubuntu-latest
     environment: ${{ github.event.inputs.environment }}
     env:
@@ -45,10 +51,6 @@ jobs:
       USER_EMAIL: ${{ secrets.USER_EMAIL }}
       USER_PASSWORD: ${{ secrets.USER_PASSWORD }}
       REQRES_API_KEY: ${{ secrets.REQRES_API_KEY }}
-    strategy:
-      fail-fast: false
-      matrix: 
-        pack: [api, ui, visual]
 
     name: Run Playwright Packs (${{ matrix.pack }} on ${{ github.event.inputs.environment }})
 
