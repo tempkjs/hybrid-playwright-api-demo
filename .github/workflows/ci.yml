@@ -95,7 +95,7 @@ jobs:
 
       - name: Run tagged tests
         env:
-          TAG: ${{ (matrix.pack == 'api' && '@api') || (matrix.pack == 'ui' && '@ui') || (matrix.pack == 'visual' && '@visual') || '' }}
+          TAG: ${{ matrix.pack == 'api' && '@api' || matrix.pack == 'ui' && '@ui' || '@visual' }}
           NODE_ENV: ${{ inputs.environment }}
         run: npx playwright test --config=src/config/playwright.config.ts
 
