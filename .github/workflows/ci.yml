@@ -36,72 +36,64 @@ env:
   USER_PASSWORD: ${{ secrets[format('{0}_USER_PASSWORD', github.event.inputs.environment)] }}
 
 jobs:
-  run-packs:
+  run-api:
+    # Run when: (not a manual run) OR (manual run where tag == api or all)
+    if: ${{ github.event_name != 'workflow_dispatch' || inputs.tag == 'all' || inputs.tag == 'api' }}
     runs-on: ubuntu-latest
-    
-    strategy:
-      fail-fast: false
-      matrix:
-        pack: [api, ui, visual]
-
-    environment: ${{ github.event.inputs.environment }}
+    environment: ${{ github.event.inputs.environment || 'qa' }}
     env:
-      NODE_ENV: ${{ inputs.environment }}
+      NODE_ENV: ${{ github.event.inputs.environment || 'qa' }}
       USER_EMAIL: ${{ secrets.USER_EMAIL }}
       USER_PASSWORD: ${{ secrets.USER_PASSWORD }}
       REQRES_API_KEY: ${{ secrets.REQRES_API_KEY }}
-
-    name: Run Playwright Packs (${{ matrix.pack }} on ${{ github.event.inputs.environment }})
-
+      TAG: "@api"
     steps:
       - uses: actions/checkout@v4
-
-      - name: Skip if pack does not match tag
-        if: ${{ github.event.inputs.tag != 'all' && github.event.inputs.tag != matrix.pack }}
-        run: |
-          echo "Skipping pack ${{ matrix.pack }} due to tag=${{ github.event.inputs.tag }}"
-          exit 0
-      
       - uses: actions/setup-node@v4
-        with:
-          node-version: 20
+        with: { node-version: 20 }
+      - run: npm ci
+      - name: Run API tests
+        run: npx playwright test -g "@api" --config=src/config/playwright.config.ts
 
-      - name: Install dependencies
-        run: npm ci
-        
-      # ✅ Cache for faster UI + Visual execution
-      - name: Cache Playwright browsers
-        if: matrix.pack != 'api'
-        uses: actions/cache@v4
-        with:
-          path: ~/.cache/ms-playwright
-          key: ${{ runner.os }}-playwright-${{ hashFiles('**/package-lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-playwright-
-      
+  run-ui:
+    if: ${{ github.event_name != 'workflow_dispatch' || inputs.tag == 'all' || inputs.tag == 'ui' }}
+    runs-on: ubuntu-latest
+    environment: ${{ github.event.inputs.environment || 'qa' }}
+    env:
+      NODE_ENV: ${{ github.event.inputs.environment || 'qa' }}
+      USER_EMAIL: ${{ secrets.USER_EMAIL }}
+      USER_PASSWORD: ${{ secrets.USER_PASSWORD }}
+      REQRES_API_KEY: ${{ secrets.REQRES_API_KEY }}
+      TAG: "@ui"
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 20 }
+      - run: npm ci
+      - name: Install browsers
+        run: npx playwright install --with-deps
+      - name: Run UI tests
+        run: npx playwright test -g "@ui" --config=src/config/playwright.config.ts
 
-      # ✅ Install only chromium browser when needed
-      - name: Install browsers for UI/visual
-        if: matrix.pack != 'api'
-        run: |
-          npx playwright install chromium
-
-      - name: Validate environment configuration
-        run: |
-          echo "Selected environment: ${{ github.event.inputs.environment }}"
-    
-          if [ -z "$USER_EMAIL" ] || [ -z "$USER_PASSWORD" ]; then
-          echo "❌ Authentication secrets missing!"
-          exit 1
-          else
-          echo "✅ Authentication secrets loaded successfully"
-          fi
-
-      - name: Run tagged tests
-        env:
-          TAG: ${{ matrix.pack == 'api' && '@api' || matrix.pack == 'ui' && '@ui' || '@visual' }}
-          NODE_ENV: ${{ inputs.environment }}
-        run: npx playwright test --config=src/config/playwright.config.ts
+  run-visual:
+    if: ${{ github.event_name != 'workflow_dispatch' || inputs.tag == 'all' || inputs.tag == 'visual' }}
+    runs-on: ubuntu-latest
+    environment: ${{ github.event.inputs.environment || 'qa' }}
+    env:
+      NODE_ENV: ${{ github.event.inputs.environment || 'qa' }}
+      USER_EMAIL: ${{ secrets.USER_EMAIL }}
+      USER_PASSWORD: ${{ secrets.USER_PASSWORD }}
+      REQRES_API_KEY: ${{ secrets.REQRES_API_KEY }}
+      TAG: "@visual"
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 20 }
+      - run: npm ci
+      - name: Install browsers
+        run: npx playwright install --with-deps
+      - name: Run Visual tests
+        run: npx playwright test -g "@visual" --config=src/config/playwright.config.ts
 
       - name: Upload report artifacts
         if: always()
