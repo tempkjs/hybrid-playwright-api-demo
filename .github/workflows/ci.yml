@@ -12,6 +12,12 @@ on:
           - dev
           - qa
           - stage
+      tag:
+        description: "Test Tag"
+        required: true
+        default: "all"
+        type: choice
+        options: [all, api, ui, visual]
 
   push:
     branches:
@@ -30,13 +36,20 @@ env:
   USER_PASSWORD: ${{ secrets[format('{0}_USER_PASSWORD', github.event.inputs.environment)] }}
 
 jobs:
-  test-packs:
+  run-packs:
+    runs-on: ubuntu-latest
+    environment: ${{ github.event.inputs.environment }}
+    env:
+      NODE_ENV: ${{ inputs.environment }}
+      USER_EMAIL: ${{ secrets.USER_EMAIL }}
+      USER_PASSWORD: ${{ secrets.USER_PASSWORD }}
+      REQRES_API_KEY: ${{ secrets.REQRES_API_KEY }}
     strategy:
-      matrix:
-        pack: [api, ui]
+      fail-fast: false
+      matrix: 
+        pack: [api, ui, visual]
 
     name: Run Playwright Packs (${{ matrix.pack }} on ${{ github.event.inputs.environment }})
-    runs-on: ubuntu-latest
 
     steps:
       - uses: actions/checkout@v4
@@ -45,6 +58,9 @@ jobs:
         with:
           node-version: 20
 
+      - name: Install dependencies
+        run: npm ci
+        
       # ✅ Cache for faster UI + Visual execution
       - name: Cache Playwright browsers
         if: matrix.pack != 'api'
@@ -61,10 +77,22 @@ jobs:
         run: |
           npx playwright install chromium
 
-      - name: Run tagged tests
+      - name: Validate environment configuration
         run: |
-          echo "Running ${{ matrix.pack }} pack on ${{ env.ENV }} env"
-          npx playwright test --grep "@${{ matrix.pack }}"
+          echo "Selected environment: ${{ github.event.inputs.environment }}"
+    
+          if [ -z "$USER_EMAIL" ] || [ -z "$USER_PASSWORD" ]; then
+          echo "❌ Authentication secrets missing!"
+          exit 1
+          else
+          echo "✅ Authentication secrets loaded successfully"
+          fi
+
+      - name: Run tagged tests
+        env:
+          TAG: ${{ (matrix.pack == 'api' && '@api') || (matrix.pack == 'ui' && '@ui') || (matrix.pack == 'visual' && '@visual') || '' }}
+          NODE_ENV: ${{ inputs.environment }}
+        run: npx playwright test --config=src/config/playwright.config.ts
 
       - name: Upload report artifacts
         if: always()
