@@ -37,14 +37,15 @@ env:
 
 jobs:
   run-packs:
+    runs-on: ubuntu-latest
+    
     strategy:
       fail-fast: false
       matrix:
         pack: [api, ui, visual]
 
     if: ${{ github.event.inputs.tag == 'all' || github.event.inputs.tag == matrix.pack }}
-    
-    runs-on: ubuntu-latest
+
     environment: ${{ github.event.inputs.environment }}
     env:
       NODE_ENV: ${{ inputs.environment }}
