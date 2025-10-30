@@ -44,8 +44,6 @@ jobs:
       matrix:
         pack: [api, ui, visual]
 
-    if: ${{ github.event.inputs.tag == 'all' || github.event.inputs.tag == matrix.pack }}
-
     environment: ${{ github.event.inputs.environment }}
     env:
       NODE_ENV: ${{ inputs.environment }}
@@ -57,6 +55,12 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
+
+      - name: Skip if pack does not match tag
+        if: ${{ github.event.inputs.tag != 'all' && github.event.inputs.tag != matrix.pack }}
+        run: |
+          echo "Skipping pack ${{ matrix.pack }} due to tag=${{ github.event.inputs.tag }}"
+          exit 0
       
       - uses: actions/setup-node@v4
         with:
