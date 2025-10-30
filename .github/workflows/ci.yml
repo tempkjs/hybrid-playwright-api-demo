@@ -37,6 +37,7 @@ env:
 
 jobs:
   run-packs:
+    if: ${{ github.event.inputs.tag == 'all' || github.event.inputs.tag == matrix.pack }}
     runs-on: ubuntu-latest
     environment: ${{ github.event.inputs.environment }}
     env:
@@ -60,13 +61,6 @@ jobs:
 
       - name: Install dependencies
         run: npm ci
-
-      - name: “Skip if pack doesn’t match tag”
-        run: |
-          if [[ "${{ github.event.inputs.tag }}" != "all" && "${{ github.event.inputs.tag }}" != "${{ matrix.pack }}" ]]; then
-            echo "Skipping pack ${{ matrix.pack }} because tag=${{ github.event.inputs.tag }}"
-            exit 0
-          fi
         
       # ✅ Cache for faster UI + Visual execution
       - name: Cache Playwright browsers
