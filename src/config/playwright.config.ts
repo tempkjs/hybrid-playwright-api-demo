@@ -8,8 +8,8 @@ console.log(`Running tests with tag: ${tag}`);
 
 export default defineConfig({
   grep: tag ? new RegExp(tag) : undefined,
-  globalSetup: "./globalSetup.ts",
-  globalTeardown: "./globalTeardown.ts",
+  // globalSetup: "./globalSetup.ts",
+  // globalTeardown: "./globalTeardown.ts",
   testDir: "../",
   timeout: 60000,
   retries: 0,
@@ -24,6 +24,6 @@ export default defineConfig({
     screenshot: "only-on-failure",
     trace: "on-first-retry",
     video: "retain-on-failure",
-    storageState: 'src/config/storageState.json',
+    // storageState: 'src/config/storageState.json',
   },
 });

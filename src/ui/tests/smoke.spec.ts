@@ -1,8 +1,8 @@
-import { test, expect } from "@playwright/test";
+import { expect } from '@playwright/test';
+import { test } from '../../fixtures/authenticatedWorker';
 
 test.describe('@ui Smoke', () => {
-test("Sample Playwright smoke test", async ({ page }) => {
-  await page.goto("https://playwright.dev/");
-  await expect(page).toHaveTitle(/Playwright/);
+test("Sample Playwright smoke test", async ({ authenticatedPage }) => {
+  await expect(authenticatedPage.locator('.rt-table')).toBeVisible();
 });
 });
