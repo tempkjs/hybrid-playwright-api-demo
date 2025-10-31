@@ -38,21 +38,29 @@ env:
 jobs:
   run-packs:
     runs-on: ubuntu-latest
+    
+    strategy:
+      fail-fast: false
+      matrix:
+        pack: [api, ui, visual]
+
     environment: ${{ github.event.inputs.environment }}
     env:
       NODE_ENV: ${{ inputs.environment }}
       USER_EMAIL: ${{ secrets.USER_EMAIL }}
       USER_PASSWORD: ${{ secrets.USER_PASSWORD }}
       REQRES_API_KEY: ${{ secrets.REQRES_API_KEY }}
-    strategy:
-      fail-fast: false
-      matrix: 
-        pack: [api, ui, visual]
 
     name: Run Playwright Packs (${{ matrix.pack }} on ${{ github.event.inputs.environment }})
 
     steps:
       - uses: actions/checkout@v4
+
+      - name: Skip if pack does not match tag
+        if: ${{ github.event.inputs.tag != 'all' && github.event.inputs.tag != matrix.pack }}
+        run: |
+          echo "Skipping pack ${{ matrix.pack }} due to tag=${{ github.event.inputs.tag }}"
+          exit 0
       
       - uses: actions/setup-node@v4
         with:
@@ -70,6 +78,7 @@ jobs:
           key: ${{ runner.os }}-playwright-${{ hashFiles('**/package-lock.json') }}
           restore-keys: |
             ${{ runner.os }}-playwright-
+      
 
       # ✅ Install only chromium browser when needed
       - name: Install browsers for UI/visual
@@ -90,7 +99,7 @@ jobs:
 
       - name: Run tagged tests
         env:
-          TAG: ${{ (matrix.pack == 'api' && '@api') || (matrix.pack == 'ui' && '@ui') || (matrix.pack == 'visual' && '@visual') || '' }}
+          TAG: ${{ matrix.pack == 'api' && '@api' || matrix.pack == 'ui' && '@ui' || '@visual' }}
           NODE_ENV: ${{ inputs.environment }}
         run: npx playwright test --config=src/config/playwright.config.ts
 
