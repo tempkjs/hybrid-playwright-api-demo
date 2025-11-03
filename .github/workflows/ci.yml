@@ -47,9 +47,6 @@ jobs:
     environment: ${{ github.event.inputs.environment }}
     env:
       NODE_ENV: ${{ inputs.environment }}
-      USER_EMAIL: ${{ secrets.USER_EMAIL }}
-      USER_PASSWORD: ${{ secrets.USER_PASSWORD }}
-      REQRES_API_KEY: ${{ secrets.REQRES_API_KEY }}
 
     name: Run Playwright Packs (${{ matrix.pack }} on ${{ github.event.inputs.environment }})
 
