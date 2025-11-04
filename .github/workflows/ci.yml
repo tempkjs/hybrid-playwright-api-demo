@@ -27,7 +27,7 @@ on:
       - main
 
 env:
-  ENV: ${{ github.event.inputs.environment }}
+  ENV: ${{ github.event.inputs.environment || 'qa'}}
 
   BASE_URL_UI: ${{ secrets[format('{0}_BASE_URL_UI', github.event.inputs.environment)] }}
   BASE_URL_API: ${{ secrets[format('{0}_BASE_URL_API', github.event.inputs.environment)] }}
@@ -44,7 +44,7 @@ jobs:
       matrix:
         pack: [api, ui, visual]
 
-    environment: ${{ github.event.inputs.environment }}
+    environment: ${{ github.event.inputs.environment || 'qa'}}
     env:
       NODE_ENV: ${{ github.event.inputs.environment || 'qa' }}
       USER_EMAIL: ${{ secrets.USER_EMAIL }}
