@@ -129,14 +129,18 @@ jobs:
   deploy-report:
     name: Deploy Report to GitHub Pages
     runs-on: ubuntu-latest
+    needs: run-packs
     if: always()
     steps:
-      - name: Download reports
+      - name: Download all report artifacts
         uses: actions/download-artifact@v4
         with:
           path: ./report-artifacts
 
-      - name: Deploy report to GitHub Pages
+      - name: List downloaded content
+        run: ls -R ./report-artifacts
+
+      - name: Deploy Allure reports to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
