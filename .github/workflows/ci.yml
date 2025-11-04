@@ -36,8 +36,14 @@ env:
   USER_PASSWORD: ${{ secrets[format('{0}_USER_PASSWORD', github.event.inputs.environment)] }}
 
 jobs:
+  always-run:
+    name: Ensure Deploy Always Runs
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "This job always runs as a dependency anchor"
+      
   run-api:
-    # Run when: (not a manual run) OR (manual run where tag == api or all)
+    needs: always-run
     if: ${{ github.event_name != 'workflow_dispatch' || inputs.tag == 'all' || inputs.tag == 'api' }}
     runs-on: ubuntu-latest
     environment: ${{ github.event.inputs.environment || 'qa' }}
@@ -58,6 +64,7 @@ jobs:
         run: npx playwright test -g "@api" --config=src/config/playwright.config.ts
 
   run-ui:
+    needs: always-run
     if: ${{ github.event_name != 'workflow_dispatch' || inputs.tag == 'all' || inputs.tag == 'ui' }}
     runs-on: ubuntu-latest
     environment: ${{ github.event.inputs.environment || 'qa' }}
@@ -80,6 +87,7 @@ jobs:
         run: npx playwright test -g "@ui" --config=src/config/playwright.config.ts
 
   run-visual:
+    needs: always-run
     if: ${{ github.event_name != 'workflow_dispatch' || inputs.tag == 'all' || inputs.tag == 'visual' }}
     runs-on: ubuntu-latest
     environment: ${{ github.event.inputs.environment || 'qa' }}
@@ -108,11 +116,21 @@ jobs:
           name: ${{ matrix.pack }}-report
           path: playwright-report
 
+  deploy-report:
+    name: Deploy Report to GitHub Pages
+    runs-on: ubuntu-latest
+    needs: [run-api, run-ui, run-visual]
+    if: always()
+    steps:
+      - name: Download reports
+        uses: actions/download-artifact@v4
+        with:
+          path: ./report-artifacts
+
       - name: Deploy report to GitHub Pages
-        if: always()
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: playwright-report/
+          publish_dir: ./report-artifacts/
           publish_branch: gh-pages
           force_orphan: true
