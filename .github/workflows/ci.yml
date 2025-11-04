@@ -51,7 +51,9 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with: { node-version: 20 }
-      - run: npm ci
+      - run: |
+          npm ci
+          echo "Selected environment: ${{ github.event.inputs.environment }}"
       - name: Run API tests
         run: npx playwright test -g "@api" --config=src/config/playwright.config.ts
 
@@ -69,7 +71,9 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with: { node-version: 20 }
-      - run: npm ci
+      - run: |
+          npm ci
+          echo "Selected environment: ${{ github.event.inputs.environment }}"
       - name: Install browsers
         run: npx playwright install --with-deps
       - name: Run UI tests
@@ -89,7 +93,9 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with: { node-version: 20 }
-      - run: npm ci
+      - run: |
+          npm ci
+          echo "Selected environment: ${{ github.event.inputs.environment }}"
       - name: Install browsers
         run: npx playwright install --with-deps
       - name: Run Visual tests
