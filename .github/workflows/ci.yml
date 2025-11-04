@@ -110,6 +110,22 @@ jobs:
           name: ${{ matrix.pack }}-report
           path: playwright-report
 
+           # ✅ Generate Allure report for every pack (api/ui/visual)
+      - name: Generate Allure report
+        if: always()
+        run: |
+          echo "Generating Allure report for ${{ matrix.pack }}"
+          npx allure generate --clean allure-results -o allure-report-${{ matrix.pack }}
+
+      # ✅ Upload Allure reports as artifacts
+      - name: Upload Allure artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.pack }}-allure-report
+          path: allure-report-${{ matrix.pack }}/
+          retention-days: 7
+
   deploy-report:
     name: Deploy Report to GitHub Pages
     runs-on: ubuntu-latest
