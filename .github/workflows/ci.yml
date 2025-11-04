@@ -46,7 +46,7 @@ jobs:
 
     environment: ${{ github.event.inputs.environment }}
     env:
-      NODE_ENV: ${{ inputs.environment }}
+      NODE_ENV: ${{ github.event.inputs.environment || 'qa' }}
       USER_EMAIL: ${{ secrets.USER_EMAIL }}
       USER_PASSWORD: ${{ secrets.USER_PASSWORD }}
       REQRES_API_KEY: ${{ secrets.REQRES_API_KEY }}
