@@ -109,3 +109,21 @@ jobs:
         with:
           name: ${{ matrix.pack }}-report
           path: playwright-report
+
+  deploy-report:
+    name: Deploy Report to GitHub Pages
+    runs-on: ubuntu-latest
+    if: always()
+    steps:
+      - name: Download reports
+        uses: actions/download-artifact@v4
+        with:
+          path: ./report-artifacts
+
+      - name: Deploy report to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./report-artifacts/
+          publish_branch: gh-pages
+          force_orphan: true
