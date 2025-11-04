@@ -42,7 +42,8 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        pack: [api, ui, visual]
+        pack: ${{ github.event.inputs.tag == 'all' && fromJson('["api","ui","visual"]') || fromJson(format('["{0}"]', github.event.inputs.tag)) }}
+
 
     environment: ${{ github.event.inputs.environment || 'qa'}}
     env:
