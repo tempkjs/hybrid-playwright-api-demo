@@ -62,6 +62,17 @@ jobs:
           echo "Selected environment: ${{ github.event.inputs.environment }}"
       - name: Run API tests
         run: npx playwright test -g "@api" --config=src/config/playwright.config.ts
+        
+      - name: Generate Allure API report
+        if: always()
+        run: npx allure generate --clean allure-results -o allure-report
+        
+      - name: Upload API Allure report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: api-allure-report
+          path: allure-report/
 
   run-ui:
     needs: always-run
@@ -85,6 +96,23 @@ jobs:
         run: npx playwright install --with-deps
       - name: Run UI tests
         run: npx playwright test -g "@ui" --config=src/config/playwright.config.ts
+      
+      - name: Generate Playwright report
+        if: always()
+        run: npx playwright show-report
+
+      - name: Generate Allure UI report
+        if: always()
+        run: npx allure generate --clean allure-results -o allure-report
+
+      - name: Upload UI reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ui-reports
+          path: |
+            playwright-report/
+            allure-report/
 
   run-visual:
     needs: always-run
@@ -115,6 +143,23 @@ jobs:
         with:
           name: ${{ matrix.pack }}-report
           path: playwright-report
+
+      - name: Generate Playwright report
+        if: always()
+        run: npx playwright show-report
+
+      - name: Generate Allure Visual report
+        if: always()
+        run: npx allure generate --clean allure-results -o allure-report
+
+      - name: Upload Visual reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: visual-reports
+          path: |
+            playwright-report/
+            allure-report/
 
   deploy-report:
     name: Deploy Report to GitHub Pages
