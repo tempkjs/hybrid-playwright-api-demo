@@ -95,11 +95,16 @@ jobs:
       - name: Install browsers
         run: npx playwright install --with-deps
       - name: Run UI tests
-        run: npx playwright test -g "@ui" --config=src/config/playwright.config.ts
+        run: npx playwright test -g "@ui" --reporter=html --config=src/config/playwright.config.ts
       
       - name: Generate Playwright report
         if: always()
-        run: npx playwright show-report
+        run: |
+          if [ -d "playwright-report" ]; then
+          npx playwright show-report
+          else
+          echo "⚠️ No Playwright report found (tests crashed before report generation)"
+          fi
 
       - name: Generate Allure UI report
         if: always()
@@ -135,7 +140,7 @@ jobs:
       - name: Install browsers
         run: npx playwright install --with-deps
       - name: Run Visual tests
-        run: npx playwright test -g "@visual" --config=src/config/playwright.config.ts
+        run: npx playwright test -g "@visual" --reporter=html --config=src/config/playwright.config.ts
 
       - name: Upload report artifacts
         if: always()
@@ -146,7 +151,12 @@ jobs:
 
       - name: Generate Playwright report
         if: always()
-        run: npx playwright show-report
+        run: |
+          if [ -d "playwright-report" ]; then
+          npx playwright show-report
+          else
+          echo "⚠️ No Playwright report found (tests crashed before report generation)"
+          fi
 
       - name: Generate Allure Visual report
         if: always()
