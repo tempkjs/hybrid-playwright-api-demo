@@ -1,0 +1,63 @@
+name: Test Orchestrator CI Pipeline
+
+on:
+  pull_request:
+    branches: [ main, develop ]
+  push:
+    branches: [ main ]
+
+jobs:
+  # 1️⃣ Quick local checks
+  fast-checks:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run lint and unit tests
+        run: |
+          npm run lint
+          npm run test:unit
+
+      - name: Run smoke suite (critical flows)
+        run: |
+          npm run test:smoke
+
+  # 2️⃣ Trigger heavy suites via orchestrator
+  trigger-orchestrator:
+    needs: [fast-checks]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Call Orchestrator API
+        env:
+          ORCH_API_TOKEN: ${{ secrets.ORCH_API_TOKEN }}
+        run: |
+          echo "Triggering orchestrator job..."
+          curl -X POST https://qa-orchestrator.internal/api/v1/jobs \
+            -H "Authorization: Bearer $ORCH_API_TOKEN" \
+            -H "Content-Type: application/json" \
+            -d '{
+              "jobName": "regression-suite",
+              "repo": "${{ github.repository }}",
+              "commit": "${{ github.sha }}",
+              "branch": "${{ github.ref_name }}",
+              "environment": "staging",
+              "suite": "full-regression",
+              "parallelism": 20,
+              "notifySlack": true
+            }'
+
+      - name: Poll for orchestrator job completion
+        run: |
+          STATUS=""
+          while [ "$STATUS" != "completed" ]
+          do
+            sleep 60
+            STATUS=$(curl -s -H "Authorization: Bearer $ORCH_API_TOKEN" \
+              https://qa-orchestrator.internal/api/v1/jobs/status/regression-suite | jq -r '.status')
+            echo "Current status: $STATUS"
+          done
+          echo "Regression suite completed!"

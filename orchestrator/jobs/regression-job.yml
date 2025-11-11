@@ -1,0 +1,37 @@
+apiVersion: qa.orchestrator/v1
+kind: TestJob
+metadata:
+  name: regression-suite
+  triggeredBy: github-local
+spec:
+  suite: full-regression
+  framework: playwright
+  parallelism: 4               # number of shards to run in parallel locally
+  environment:
+    type: ephemeral
+    namespace: qa-${{ commit }}
+    variables:
+      BASE_URL: http://localhost:8080
+      DB_SEED: golden-set-v3
+  data:
+    source: data-factory
+    mask: true
+  sharding:
+    strategy: duration-balanced
+    shardKey: testFile
+  retries:
+    maxAttempts: 1
+    onFailureOnly: true
+  reporting:
+    reporters:
+      - allure
+      - grafana
+    publishArtifacts: true
+  notifications:
+    slackChannel: "#qa-notifications"
+    notifyOn: [job-completion, job-failure]
+    emailOnFailure: qa-alerts@abc.com
+  vcs:
+    repository: github.com/your-org/your-repo
+    branch: main
+    commit: auto-detect # use the commit that triggered the job
