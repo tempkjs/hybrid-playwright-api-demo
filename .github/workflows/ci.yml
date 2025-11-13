@@ -27,7 +27,7 @@ on:
       - main
 
 env:
-  ENV: ${{ github.event.inputs.environment }}
+  ENV: ${{ github.event.inputs.environment || 'qa'}}
 
   BASE_URL_UI: ${{ secrets[format('{0}_BASE_URL_UI', github.event.inputs.environment)] }}
   BASE_URL_API: ${{ secrets[format('{0}_BASE_URL_API', github.event.inputs.environment)] }}
@@ -42,11 +42,12 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        pack: [api, ui, visual]
+        pack: ${{ github.event.inputs.tag == 'all' && fromJson('["api","ui","visual"]') || fromJson(format('["{0}"]', github.event.inputs.tag)) }}
 
-    environment: ${{ github.event.inputs.environment }}
+
+    environment: ${{ github.event.inputs.environment || 'qa'}}
     env:
-      NODE_ENV: ${{ inputs.environment }}
+      NODE_ENV: ${{ github.event.inputs.environment || 'qa' }}
       USER_EMAIL: ${{ secrets.USER_EMAIL }}
       USER_PASSWORD: ${{ secrets.USER_PASSWORD }}
       REQRES_API_KEY: ${{ secrets.REQRES_API_KEY }}
@@ -109,3 +110,41 @@ jobs:
         with:
           name: ${{ matrix.pack }}-report
           path: playwright-report
+
+           # ✅ Generate Allure report for every pack (api/ui/visual)
+      - name: Generate Allure report
+        if: always()
+        run: |
+          echo "Generating Allure report for ${{ matrix.pack }}"
+          npx allure generate --clean allure-results -o allure-report-${{ matrix.pack }}
+
+      # ✅ Upload Allure reports as artifacts
+      - name: Upload Allure artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.pack }}-allure-report
+          path: allure-report-${{ matrix.pack }}/
+          retention-days: 7
+
+  deploy-report:
+    name: Deploy Report to GitHub Pages
+    runs-on: ubuntu-latest
+    needs: run-packs
+    if: always()
+    steps:
+      - name: Download all report artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: ./report-artifacts
+
+      - name: List downloaded content
+        run: ls -R ./report-artifacts
+
+      - name: Deploy Allure reports to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./report-artifacts/
+          publish_branch: gh-pages
+          force_orphan: true
