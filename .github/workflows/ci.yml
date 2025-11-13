@@ -127,6 +127,51 @@ jobs:
           path: allure-report-${{ matrix.pack }}/
           retention-days: 7
 
+            # ✅ NEW JOB: MABL TESTS (AI CLOUD RUN)
+  mabl-tests:
+    name: Run Mabl Smart Tests
+    runs-on: ubuntu-latest
+    needs: [run-packs]  # waits for Playwright packs to finish
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Install Mabl CLI
+        run: npm install -g @mablhq/mabl-cli
+
+      - name: Authenticate Mabl CLI
+        run: mabl auth --api-key "${{ secrets.MABL_API_KEY }}"
+
+      - name: Trigger Mabl Run
+        id: trigger_mabl
+        run: |
+          echo "Triggering Mabl test run..."
+          RUN_ID=$(mabl runs create \
+            --application-id "${{ secrets.MABL_APP_ID }}" \
+            --environment-id "${{ secrets.MABL_ENV_ID }}" \
+            --plan-name "ui-visual-checks" \
+            --set-branch "${{ github.ref_name }}" \
+            --set-run-name "GitHub CI Run ${{ github.run_number }}" \
+            --output json \
+            | jq -r '.id')
+          echo "RUN_ID=$RUN_ID" >> $GITHUB_ENV
+
+      - name: Wait for Mabl Run to Complete
+        run: mabl runs get $RUN_ID --wait
+
+      - name: Download Mabl Results
+        run: |
+          mkdir -p mabl-results
+          mabl runs download-results $RUN_ID --directory mabl-results
+          ls -l mabl-results
+
+      - name: Upload Mabl Results as Artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: mabl-results
+          path: mabl-results
+
   deploy-report:
     name: Deploy Report to GitHub Pages
     runs-on: ubuntu-latest
