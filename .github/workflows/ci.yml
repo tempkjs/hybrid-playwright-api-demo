@@ -210,3 +210,10 @@ jobs:
           publish_dir: ./report-artifacts/
           publish_branch: gh-pages
           force_orphan: true
+
+      - name: Copy Allure Summary
+        run: |
+          mkdir -p gh-pages/report-summary
+          cp static/allure-summary.html gh-pages/allure-summary/index.html
+          echo "✅ Summary page copied"
+
