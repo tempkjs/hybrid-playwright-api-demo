@@ -157,17 +157,19 @@ jobs:
         id: trigger_mabl
         run: |
           echo "Triggering Mabl test run..."
-          mabl tests run-cloud \
+          RUN_ID=$(mabl tests run-cloud \
             --application-id "${{ secrets.MABL_APP_ID }}" \
             --environment-id "${{ secrets.MABL_ENV_ID }}" \
             --labels "Sanity" \
             --browsers "chrome" \
             --no-prompt
+            --output json | jq -r '.journey_run_ids[0]')
+          echo "RUN_ID=$RUN_ID" >> $GITHUB_ENV
 
       - name: Download Mabl Results
         run: |
           mkdir -p mabl-results
-          mabl runs download-results $RUN_ID --directory mabl-results
+          mabl test-runs export $RUN_ID --directory mabl-results
           ls -l mabl-results
 
       - name: Upload Mabl Results as Artifact
