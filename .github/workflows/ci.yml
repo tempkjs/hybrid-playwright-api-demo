@@ -133,6 +133,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: [run-packs]  # waits for Playwright packs to finish
     if: always()
+    environment: ${{ github.event.inputs.environment || 'qa' }}
     steps:
       - name: Checkout repo
         uses: actions/checkout@v4
