@@ -157,11 +157,16 @@ jobs:
         id: trigger_mabl
         run: |
           echo "Triggering Mabl Cloud run..."
-          RUN_ID=$(mabl tests run-cloud --application-id "${{ secrets.MABL_APP_ID }}" \
+          RUN_LOG=$(mktemp)
+          mabl tests run-cloud \
+          --application-id "${{ secrets.MABL_APP_ID }}" \
           --environment-id "${{ secrets.MABL_ENV_ID }}" \
-          --labels "Sanity" --browsers "chrome" --no-prompt --output json | jq -r '.journey_run_ids[0]')
-          echo "✅ Extracted RUN_ID: $RUN_ID"
-          echo "RUN_ID=$RUN_ID" >> $GITHUB_ENV
+          --labels "Sanity" \
+          --browsers "chrome" \
+          --no-prompt | tee "$RUN_LOG"
+
+          # Extract Run ID from the printed URL
+          RUN_ID=$(grep -o 'journey-runs/[A-Za-z0-9_-]*' "$RUN_LOG" | sed 's#.*/##' | tail -n1)
 
       - name: Download Mabl Results
         run: |
