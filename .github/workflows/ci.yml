@@ -144,6 +144,15 @@ jobs:
       - name: Authenticate Mabl CLI
         run: mabl auth --api-key "${{ secrets.MABL_API_KEY }}"
 
+      - name: Validate Mabl API key presence
+        run: |
+          if [ -z "${{ secrets.MABL_API_KEY }}" ]; then
+            echo "❌ MABL_API_KEY not available!"
+            exit 1
+          else
+            echo "✅ MABL_API_KEY is available (masked)"
+          fi
+
       - name: Trigger Mabl Run
         id: trigger_mabl
         run: |
