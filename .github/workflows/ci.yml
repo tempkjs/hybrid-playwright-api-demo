@@ -214,6 +214,6 @@ jobs:
       - name: Copy Allure Summary
         run: |
           mkdir -p gh-pages/report-summary
-          cp static/allure-summary.html gh-pages/allure-summary/index.html
+          cp static/report-summary.html gh-pages/report-summary/index.html
           echo "✅ Summary page copied"
 
