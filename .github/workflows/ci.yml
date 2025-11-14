@@ -155,7 +155,6 @@ jobs:
 
       - name: Trigger Mabl Run
         id: trigger_mabl
-        shell: bash
         run: |
           echo "Triggering Mabl Cloud run..."
           RUN_ID=$(mabl tests run-cloud \
