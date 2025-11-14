@@ -157,7 +157,7 @@ jobs:
         id: trigger_mabl
         run: |
           echo "Triggering Mabl test run..."
-          RUN_ID=$(mabl runs create \
+          RUN_ID=$(mabl test-runs create \
             --application-id "${{ secrets.MABL_APP_ID }}" \
             --environment-id "${{ secrets.MABL_ENV_ID }}" \
             --plan-name "ui-visual-checks" \
@@ -168,7 +168,7 @@ jobs:
           echo "RUN_ID=$RUN_ID" >> $GITHUB_ENV
 
       - name: Wait for Mabl Run to Complete
-        run: mabl runs get $RUN_ID --wait
+        run: mabl test-runs get $RUN_ID --wait
 
       - name: Download Mabl Results
         run: |
