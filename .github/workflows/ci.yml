@@ -151,7 +151,7 @@ jobs:
           fi
 
       - name: Authenticate Mabl CLI
-        run: mabl auth --api-key "${{ secrets.MABL_API_KEY }}"
+        run: mabl auth activate-key "${{ secrets.MABL_API_KEY }}"
 
       - name: Trigger Mabl Run
         id: trigger_mabl
