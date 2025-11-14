@@ -157,17 +157,12 @@ jobs:
         id: trigger_mabl
         run: |
           echo "Triggering Mabl test run..."
-          RUN_ID=$(mabl tests run-legacy \
+          mabl tests run-cloud \
             --application-id "${{ secrets.MABL_APP_ID }}" \
             --environment-id "${{ secrets.MABL_ENV_ID }}" \
-            --plan-name "ui-visual-checks" \
-            --set-branch "${{ github.ref_name }}" \
-            --set-run-name "GitHub CI Run ${{ github.run_number }}" \
-            --output json | jq -r '.id')
-          echo "RUN_ID=$RUN_ID" >> $GITHUB_ENV
-
-      - name: Wait for Mabl Run to Complete
-        run: mabl test-runs get $RUN_ID --wait
+            --labels "Sanity" \
+            --browsers "chrome" \
+            --no-prompt
 
       - name: Download Mabl Results
         run: |
