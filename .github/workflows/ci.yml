@@ -157,13 +157,13 @@ jobs:
         id: trigger_mabl
         run: |
           echo "Triggering Mabl Cloud run..."
-          RUN_ID=$(mabl tests run-cloud \
+          RUN_ID=$(bash -c "mabl tests run-cloud \
           --application-id "${{ secrets.MABL_APP_ID }}" \
           --environment-id "${{ secrets.MABL_ENV_ID }}" \
           --labels "Sanity" \
           --browsers "chrome" \
           --no-prompt \
-          --output json | jq -r '.journey_run_ids[0]')
+          --output json" | jq -r '.journey_run_ids[0]')
           echo "✅ Extracted RUN_ID: $RUN_ID"
           echo "RUN_ID=$RUN_ID" >> $GITHUB_ENV
 
