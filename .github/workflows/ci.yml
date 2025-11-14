@@ -174,8 +174,8 @@ jobs:
       - name: Download Mabl Results
         run: |
           mkdir -p mabl-results
-          mabl test-runs export $RUN_ID --directory mabl-results
-          ls -l mabl-results
+          mabl test-runs export $RUN_ID --types all --file mabl-results/$RUN_ID.zip
+          echo "✅ Mabl results exported to mabl-results/$RUN_ID.zip"
 
       - name: Upload Mabl Results as Artifact
         if: always()
