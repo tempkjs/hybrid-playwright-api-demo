@@ -168,6 +168,9 @@ jobs:
           # Extract Run ID from the printed URL
           RUN_ID=$(grep -o 'journey-runs/[A-Za-z0-9_-]*' "$RUN_LOG" | sed 's#.*/##' | tail -n1)
 
+          echo "✅ Extracted RUN_ID: $RUN_ID"
+          echo "RUN_ID=$RUN_ID" >> $GITHUB_ENV
+
       - name: Download Mabl Results
         run: |
           mkdir -p mabl-results
