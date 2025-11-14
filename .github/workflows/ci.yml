@@ -141,9 +141,6 @@ jobs:
       - name: Install Mabl CLI
         run: npm install -g @mablhq/mabl-cli
 
-      - name: Authenticate Mabl CLI
-        run: mabl auth --api-key "${{ secrets.MABL_API_KEY }}"
-
       - name: Validate Mabl API key presence
         run: |
           if [ -z "${{ secrets.MABL_API_KEY }}" ]; then
@@ -152,6 +149,9 @@ jobs:
           else
             echo "✅ MABL_API_KEY is available (masked)"
           fi
+
+      - name: Authenticate Mabl CLI
+        run: mabl auth --api-key "${{ secrets.MABL_API_KEY }}"
 
       - name: Trigger Mabl Run
         id: trigger_mabl
