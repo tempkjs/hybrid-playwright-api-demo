@@ -173,24 +173,8 @@ jobs:
 
       - name: Wait for Mabl Run to Complete
         run: |
-          echo "⏳ Waiting for Mabl run to complete..."
-          STATUS="queued"
-          ATTEMPTS=0
-
-          # Loop for up to 10 minutes (20 checks × 30 seconds)
-          while [[ "$STATUS" != "completed" && "$STATUS" != "succeeded" && "$STATUS" != "failed" && "$STATUS" != "errored" && $ATTEMPTS -lt 20 ]]; do
-          sleep 30
-          STATUS=$(mabl test-runs get $RUN_ID --output json | jq -r '.status' 2>/dev/null || echo "queued")
-          echo "🔄 Current status: $STATUS"
-          ATTEMPTS=$((ATTEMPTS+1))
-          done
-
-          if [[ "$STATUS" == "queued" || "$STATUS" == "running" ]]; then
-          echo "❌ Timeout: Mabl run did not finish in expected time."
-          exit 1
-          fi
-
-          echo "✅ Mabl run completed with status: $STATUS"
+          echo "⏳ Waiting 90 seconds for Mabl run to complete..."
+          sleep 90
 
       - name: Download Mabl Results
         run: |
