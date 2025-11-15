@@ -14,6 +14,8 @@ const runJsonFile = runFolders.find(f =>
   f.startsWith("xray_results") && f.endsWith(".json")
 );
 
+const runId = runJsonFile.replace("xray_results_", "").replace(".json", "");
+
 
 if (!runJsonFile) {
   console.error("❌ No xray.json found in mabl-results/");
@@ -33,7 +35,7 @@ const summaryHtml = `
 </head>
 <body>
 <h1>Mabl Test Execution Report</h1>
-<p><strong>Run ID:</strong> ${runIdFolder}</p>
+<p><strong>Run ID:</strong> ${runId}</p>
 
 <h2>Test Results</h2>
 <ul>
