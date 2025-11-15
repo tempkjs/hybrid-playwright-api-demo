@@ -206,6 +206,11 @@ jobs:
         with:
           path: ./report-artifacts
 
+      - name: Unzip Mabl Results
+        run: |
+          cd report-artifacts
+          unzip mabl-results.zip -d mabl-results
+
       - name: Generate Mabl HTML Report
         run: |
           npm install
