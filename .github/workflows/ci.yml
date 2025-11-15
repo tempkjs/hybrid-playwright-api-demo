@@ -222,11 +222,11 @@ jobs:
       - name: List downloaded content
         run: ls -R ./report-artifacts
 
-      - name: Copy Report Summary
+      - name: Copy Full Report Summary (Including Subfolders)
         run: |
-          mkdir -p ./report-artifacts/report-summary
-          cp -r report-summary/* ./report-artifacts/report-summary
-          echo "✅ Report summary page copied successfully"
+          mkdir -p ./report-artifacts
+          cp -R report-summary ./report-artifacts/
+
 
       - name: Deploy Allure reports to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
