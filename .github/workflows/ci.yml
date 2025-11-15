@@ -209,7 +209,7 @@ jobs:
       - name: Unzip Mabl Results
         run: |
           cd report-artifacts/mabl-results
-          unzip *.zip -d extracted
+          unzip *.zip
 
       - name: Generate Mabl HTML Report
         run: |
