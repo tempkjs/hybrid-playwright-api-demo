@@ -3,8 +3,11 @@ const path = require("path");
 
 // Input paths
 const RESULTS_DIR = "report-artifacts/mabl-results";
-// const REPORT_DIR = "report-summary/mabl-report";
-const REPORT_DIR = "report-summary";
+const REPORT_DIR = "./report-summary/mabl-report";
+// const REPORT_DIR = "report-summary";
+
+console.log("Writing Mabl report to:", REPORT_DIR);
+console.log("Directory exists:", fs.existsSync(REPORT_DIR));
 
 // Ensure output directory
 fs.mkdirSync(REPORT_DIR, { recursive: true });
