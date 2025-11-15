@@ -12,7 +12,8 @@
     "api:stage": "TAG=@api NODE_ENV=stage npx playwright test --config=src/config/playwright.config.ts",
     "visual:dev": "TAG=@visual NODE_ENV=dev npx playwright test --config=src/config/playwright.config.ts",
     "visual:qa": "TAG=@visual NODE_ENV=qa npx playwright test --config=src/config/playwright.config.ts",
-    "visual:stage": "TAG=@visual NODE_ENV=stage npx playwright test --config=src/config/playwright.config.ts"
+    "visual:stage": "TAG=@visual NODE_ENV=stage npx playwright test --config=src/config/playwright.config.ts",
+    "generate:mabl": "node scripts/generate-mabl-html.js"
   },
   "keywords": [],
   "author": "",

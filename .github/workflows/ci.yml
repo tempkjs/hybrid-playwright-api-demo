@@ -204,13 +204,21 @@ jobs:
         with:
           path: ./report-artifacts
 
+      - name: Generate Mabl HTML Report
+        run: |
+          npm install
+          npm run generate:mabl
+        env:
+          RUN_ID: ${{ env.RUN_ID }}
+
+
       - name: List downloaded content
         run: ls -R ./report-artifacts
 
       - name: Copy Report Summary
         run: |
           mkdir -p ./report-artifacts/report-summary
-          cp report-summary/index.html ./report-artifacts/report-summary/index.html
+          cp report-summary/* ./report-artifacts/report-summary/index.html
           echo "✅ Report summary page copied successfully"
 
       - name: Deploy Allure reports to GitHub Pages
