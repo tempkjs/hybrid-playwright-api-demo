@@ -10,15 +10,18 @@ fs.mkdirSync(REPORT_DIR, { recursive: true });
 
 // Find the run folder
 const runFolders = fs.readdirSync(RESULTS_DIR);
-const runIdFolder = runFolders.find(f => fs.existsSync(`${RESULTS_DIR}/${f}/xray.json`));
+const runJsonFile = runFolders.find(f =>
+  f.startsWith("xray_results") && f.endsWith(".json")
+);
 
-if (!runIdFolder) {
+
+if (!runJsonFile) {
   console.error("❌ No xray.json found in mabl-results/");
   process.exit(1);
 }
 
-const runPath = path.join(RESULTS_DIR, runIdFolder);
-const jsonPath = path.join(runPath, "xray.json");
+// const runPath = path.join(RESULTS_DIR, runIdFolder);
+const jsonPath = path.join(RESULTS_DIR, runJsonFile);
 
 const data = JSON.parse(fs.readFileSync(jsonPath));
 
