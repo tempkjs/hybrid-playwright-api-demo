@@ -2,7 +2,7 @@ const fs = require("fs");
 const path = require("path");
 
 // Input paths
-const RESULTS_DIR = "mabl-results";
+const RESULTS_DIR = "report-artifacts/mabl-results";
 const REPORT_DIR = "report-summary/mabl-report";
 
 // Ensure output directory
