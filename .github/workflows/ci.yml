@@ -225,7 +225,7 @@ jobs:
       - name: Copy Report Summary
         run: |
           mkdir -p ./report-artifacts/report-summary
-          cp report-summary/* ./report-artifacts/report-summary/index.html
+          cp -r report-summary/* ./report-artifacts/report-summary
           echo "✅ Report summary page copied successfully"
 
       - name: Deploy Allure reports to GitHub Pages
