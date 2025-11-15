@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Hybrid Playwright API Demo - Test Reports Summary</title>
+  <style>
+    body {
+      font-family: "Inter", Arial, sans-serif;
+      background-color: #0f172a;
+      color: #f8fafc;
+      margin: 0;
+      padding: 0;
+    }
+    header {
+      text-align: center;
+      padding: 2rem 1rem;
+      background: #1e293b;
+      border-bottom: 2px solid #334155;
+    }
+    header h1 {
+      font-size: 1.8rem;
+      margin-bottom: 0.3rem;
+    }
+    header p {
+      color: #94a3b8;
+      font-size: 1rem;
+    }
+    .container {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1.5rem;
+      padding: 2rem;
+    }
+    .card {
+      background: #1e293b;
+      border: 1px solid #334155;
+      border-radius: 12px;
+      padding: 1.5rem;
+      text-align: center;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 0 10px rgba(148, 163, 184, 0.2);
+    }
+    .card h2 {
+      color: #38bdf8;
+      font-size: 1.3rem;
+      margin-bottom: 0.5rem;
+    }
+    .card p {
+      color: #94a3b8;
+      font-size: 0.95rem;
+      margin-bottom: 1.2rem;
+    }
+    .btn {
+      text-decoration: none;
+      background: #38bdf8;
+      color: #0f172a;
+      padding: 0.6rem 1.2rem;
+      border-radius: 6px;
+      font-weight: 600;
+      transition: background 0.3s;
+    }
+    .btn:hover {
+      background: #0ea5e9;
+    }
+    footer {
+      text-align: center;
+      padding: 1.5rem;
+      font-size: 0.9rem;
+      color: #64748b;
+      border-top: 1px solid #334155;
+      background: #1e293b;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Test Execution Summary Dashboard</h1>
+    <p>Hybrid Playwright + API + Visual + Mabl Smart Tests</p>
+  </header>
+
+  <main class="container">
+    <div class="card">
+      <h2>UI Automation Report</h2>
+      <p>Playwright-based end-to-end UI test results</p>
+      <a href="../ui-allure-report/index.html" class="btn">View Report</a>
+    </div>
+
+    <div class="card">
+      <h2>API Automation Report</h2>
+      <p>Playwright API + Contract Testing report</p>
+      <a href="../api-allure-report/index.html" class="btn">View Report</a>
+    </div>
+
+    <div class="card">
+      <h2>Visual Validation Report</h2>
+      <p>Visual regression and layout validation results</p>
+      <a href="../visual-allure-report/index.html" class="btn">View Report</a>
+    </div>
+
+    <div class="card">
+      <h2>Mabl Smart Tests</h2>
+      <p>AI-powered smart test results from Mabl Cloud</p>
+      <a href="../mabl-results/" class="btn">View Mabl Results</a>
+    </div>
+  </main>
+
+  <footer>
+    © 2025 tempkjs · Hybrid Playwright API Demo
+  </footer>
+</body>
+</html>
