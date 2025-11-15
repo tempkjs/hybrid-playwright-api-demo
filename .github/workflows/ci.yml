@@ -203,6 +203,12 @@ jobs:
       - name: List downloaded content
         run: ls -R ./report-artifacts
 
+      - name: Copy Report Summary
+        run: |
+          mkdir -p ./report-artifacts/report-summary
+          cp report-summary/index.html ./report-artifacts/report-summary/index.html
+          echo "✅ Report summary page copied successfully"
+
       - name: Deploy Allure reports to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         with:
@@ -210,10 +216,4 @@ jobs:
           publish_dir: ./report-artifacts/
           publish_branch: gh-pages
           force_orphan: true
-
-      - name: Copy Report Summary
-        run: |
-          mkdir -p gh-pages/report-summary
-          cp static/report-summary.html gh-pages/report-summary/index.html
-          echo "✅ Report summary page copied successfully"
 
