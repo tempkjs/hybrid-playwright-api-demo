@@ -3,7 +3,8 @@ const path = require("path");
 
 // Input paths
 const RESULTS_DIR = "report-artifacts/mabl-results";
-const REPORT_DIR = "report-summary/mabl-report";
+// const REPORT_DIR = "report-summary/mabl-report";
+const REPORT_DIR = "report-summary";
 
 // Ensure output directory
 fs.mkdirSync(REPORT_DIR, { recursive: true });
@@ -51,7 +52,7 @@ ${data.tests.map(t => `
 </html>
 `;
 
-fs.writeFileSync(`${REPORT_DIR}/index.html`, summaryHtml);
+fs.writeFileSync(path.join(REPORT_DIR, "index.html"), summaryHtml);
 
 // ---- Generate INDIVIDUAL TEST PAGES ---- //
 data.tests.forEach(test => {
