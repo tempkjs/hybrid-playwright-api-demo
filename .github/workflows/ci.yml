@@ -167,14 +167,16 @@ jobs:
 
       - name: Extract Test Run IDs
         run: |
-          RUN_IDS=$(echo "$RUN_LOG" | grep -o "journey-runs/[A-Za-z0-9_-]*" | sed 's#journey-runs/##')
+          RUN_IDS=$(echo "$RUN_LOG" \
+          | grep -o "/test/journey-runs/[A-Za-z0-9_-]*" \
+          | sed 's#/test/journey-runs/##')
 
           echo "Extracted test run IDs:"
           echo "$RUN_IDS"
-          
+
           echo "RUN_IDS<<EOF" >> $GITHUB_ENV
-          echo "$RUN_IDS" >> $GITHUB_ENV
-          echo "EOF" >> $GITHUB_ENV
+          echo "$RUN_IDS"       >> $GITHUB_ENV
+          echo "EOF"             >> $GITHUB_ENV
 
 
       - name: Wait for Mabl Run to Complete
