@@ -1,79 +1,162 @@
 const fs = require("fs");
 const path = require("path");
 
-// Input paths
-const RESULTS_DIR = "report-artifacts/mabl-results";
-const REPORT_DIR = "./report-summary/mabl-report";
-// const REPORT_DIR = "report-summary";
+/**
+ * CONFIG — Adjust only if your folder structure changes
+ */
+const RESULTS_DIR = "report-artifacts/mabl-results";             // Where the xray_results_*.json file is unzipped
+const REPORT_DIR = "./report-summary/mabl-report";               // Where HTML output should be written
 
-console.log("Writing Mabl report to:", REPORT_DIR);
-console.log("Directory exists:", fs.existsSync(REPORT_DIR));
+/**
+ * Utility: Make a string safe for filenames
+ */
+function safe(str) {
+  return String(str).toLowerCase().replace(/[^a-z0-9]+/g, "-");
+}
 
-// Ensure output directory
+/**
+ * 1. Ensure output folder exists
+ */
 fs.mkdirSync(REPORT_DIR, { recursive: true });
 
-// Find the run folder
+console.log("📁 REPORT_DIR =", REPORT_DIR);
+console.log("📁 RESULTS_DIR =", RESULTS_DIR);
+
+/**
+ * 2. Locate the xray_results_<runId>.json file
+ */
 const runFolders = fs.readdirSync(RESULTS_DIR);
-const runJsonFile = runFolders.find(f =>
-  f.startsWith("xray_results") && f.endsWith(".json")
-);
-
-const runId = runJsonFile.replace("xray_results_", "").replace(".json", "");
-
+const runJsonFile = runFolders.find((f) => f.startsWith("xray_results_") && f.endsWith(".json"));
 
 if (!runJsonFile) {
-  console.error("❌ No xray.json found in mabl-results/");
+  console.error("❌ No xray_results_*.json found in mabl-results/");
   process.exit(1);
 }
 
-// const runPath = path.join(RESULTS_DIR, runIdFolder);
-const jsonPath = path.join(RESULTS_DIR, runJsonFile);
+const runJsonPath = path.join(RESULTS_DIR, runJsonFile);
+const data = JSON.parse(fs.readFileSync(runJsonPath, "utf-8"));
 
-const data = JSON.parse(fs.readFileSync(jsonPath));
+/**
+ * Extract runId from filename
+ */
+const runId = runJsonFile.replace("xray_results_", "").replace(".json", "");
 
-// ---- Generate MAIN SUMMARY PAGE ---- //
-const summaryHtml = `
+console.log("🔍 Found Mabl run JSON:", runJsonFile);
+console.log("🆔 Run ID:", runId);
+
+/**
+ * 3. Normalize test structure to support BOTH formats
+ *
+ * Case A — Multi-test:
+ *   { tests: [ { testInfo, steps, status }, { ... } ] }
+ *
+ * Case B — Single test:
+ *   { testInfo, steps, status }
+ */
+let testRuns = [];
+
+if (Array.isArray(data.tests)) {
+  console.log("📌 Detected multi-test run");
+  testRuns = data.tests;
+} else if (data.testInfo) {
+  console.log("📌 Detected single-test run");
+  testRuns = [data];
+} else {
+  console.error("❌ ERROR: JSON does not contain testInfo or tests[]");
+  process.exit(1);
+}
+
+/**
+ * 4. Generate HTML for each test
+ */
+testRuns.forEach((run, idx) => {
+  const testName = run.testInfo?.summary || `Test-${idx + 1}`;
+
+  // Robust test identifier selection
+  const testId =
+    run.testInfo?.id ||
+    run.testInfo?.testId ||
+    run.testInfo?.testRunId ||
+    safe(testName);
+
+  const filename = `${testId}.html`;
+  const filePath = path.join(REPORT_DIR, filename);
+
+  console.log(`📝 Writing report: ${filename}`);
+
+  const html = `
 <html>
 <head>
-  <title>Mabl Report Summary</title>
+  <title>${testName}</title>
+  <style>
+    body { font-family: Arial; margin: 20px; }
+    pre { padding: 12px; background: #f7f7f7; border-radius: 6px; }
+    h1 { margin-bottom: 5px; }
+    .status { font-size: 18px; margin-bottom: 15px; }
+  </style>
 </head>
 <body>
+
+<h1>${testName}</h1>
+<div class="status"><strong>Status:</strong> ${run.status}</div>
+
+<h2>Raw Test JSON</h2>
+<pre>${JSON.stringify(run, null, 2)}</pre>
+
+</body>
+</html>
+`;
+
+  fs.writeFileSync(filePath, html);
+});
+
+/**
+ * 5. Build index.html summary page
+ */
+console.log("📝 Writing index.html ...");
+
+let indexHtml = `
+<html>
+<head>
+  <title>Mabl Test Execution Report</title>
+  <style>
+    body { font-family: Arial; margin: 20px; }
+    ul { margin-top: 12px; }
+    li { margin-bottom: 8px; }
+  </style>
+</head>
+<body>
+
 <h1>Mabl Test Execution Report</h1>
-<p><strong>Run ID:</strong> ${runId}</p>
+<h3>Run ID: ${runId}</h3>
 
 <h2>Test Results</h2>
 <ul>
-${data.tests.map(t => `
+`;
+
+testRuns.forEach((run, idx) => {
+  const testName = run.testInfo?.summary || `Test-${idx + 1}`;
+
+  const testId =
+    run.testInfo?.id ||
+    run.testInfo?.testId ||
+    run.testInfo?.testRunId ||
+    safe(testName);
+
+  indexHtml += `
   <li>
-    <a href="./${t.testKey}.html">${t.testSummary}</a>
-    — <strong>${t.status}</strong>
+    <a href="./${testId}.html">${testName}</a> — <strong>${run.status}</strong>
   </li>
-`).join("")}
+`;
+});
+
+indexHtml += `
 </ul>
 
 </body>
 </html>
 `;
 
-fs.writeFileSync(path.join(REPORT_DIR, "index.html"), summaryHtml);
+fs.writeFileSync(path.join(REPORT_DIR, "index.html"), indexHtml);
 
-// ---- Generate INDIVIDUAL TEST PAGES ---- //
-data.tests.forEach(test => {
-  const testHtml = `
-  <html>
-  <head>
-    <title>${test.testSummary}</title>
-  </head>
-  <body>
-    <h1>${test.testSummary}</h1>
-    <p><strong>Status:</strong> ${test.status}</p>
-    <pre>${JSON.stringify(test, null, 2)}</pre>
-    <p><a href="index.html">⬅ Back to summary</a></p>
-  </body>
-  </html>
-  `;
-
-  fs.writeFileSync(`${REPORT_DIR}/${test.testKey}.html`, testHtml);
-});
-
-console.log("✅ Mabl HTML report generated at report-summary/mabl-report/");
+console.log("✅ Mabl HTML report generated successfully at", REPORT_DIR);
