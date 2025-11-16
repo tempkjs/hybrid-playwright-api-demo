@@ -165,11 +165,17 @@ jobs:
           --browsers "chrome" \
           --no-prompt | tee "$RUN_LOG"
 
-          # Extract Run ID from the printed URL
-          RUN_ID=$(grep -o 'journey-runs/[A-Za-z0-9_-]*' "$RUN_LOG" | sed 's#.*/##' | tail -n1)
+      - name: Extract Test Run IDs
+        run: |
+          RUN_IDS=$(echo "$RUN_LOG" | grep -o "journey-runs/[A-Za-z0-9_-]*" | sed 's#journey-runs/##')
 
-          echo "✅ Extracted RUN_ID: $RUN_ID"
-          echo "RUN_ID=$RUN_ID" >> $GITHUB_ENV
+          echo "Extracted test run IDs:"
+          echo "$RUN_IDS"
+          
+          echo "RUN_IDS<<EOF" >> $GITHUB_ENV
+          echo "$RUN_IDS" >> $GITHUB_ENV
+          echo "EOF" >> $GITHUB_ENV
+
 
       - name: Wait for Mabl Run to Complete
         run: |
