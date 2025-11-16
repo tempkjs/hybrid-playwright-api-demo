@@ -173,8 +173,8 @@ jobs:
 
       - name: Wait for Mabl Run to Complete
         run: |
-          echo "⏳ Waiting 90 seconds for Mabl run to complete..."
-          sleep 90
+          echo "⏳ Waiting 180 seconds for Mabl run to complete..."
+          sleep 180
 
       - name: Download Mabl Results
         run: |
