@@ -161,7 +161,7 @@ jobs:
           mabl tests run-cloud \
           --application-id "${{ secrets.MABL_APP_ID }}" \
           --environment-id "${{ secrets.MABL_ENV_ID }}" \
-          --labels "Sanity" \
+          --labels "Self-Healing" \
           --browsers "chrome" \
           --no-prompt 2>&1 | tee "$RUN_LOG"
 
