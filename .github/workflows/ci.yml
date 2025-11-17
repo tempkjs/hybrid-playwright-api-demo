@@ -168,8 +168,6 @@ jobs:
           echo "===== MABL OUTPUT (for debug) ====="
           sed -n '1,200p' "$RUN_LOG"   # optional debug print
 
-      - name: Extract Test Run IDs
-        run: |
           RUN_ID=$(grep -oE 'journey-runs/[A-Za-z0-9_-]+' "$RUN_LOG" | sed 's#.*/##' | tail -n1)
 
           if [ -z "$RUN_ID" ]; then
