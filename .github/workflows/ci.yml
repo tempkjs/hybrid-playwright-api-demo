@@ -179,13 +179,13 @@ jobs:
           echo "Fetching run IDs from Mabl API..."
 
           RUN_JSON=$(curl -s -H "x-api-key: ${{ secrets.MABL_API_KEY }}" \
-          "https://api.mabl.com/v1/runs?execution_id=${EXEC_ID}")
+          "https://api.mabl.com/v1/executions/${EXEC_ID}")
 
           echo "$RUN_JSON" > fetched_runs.json
           echo "Fetched run metadata:"
           cat fetched_runs.json | jq '.'
 
-          RUN_IDS=$(echo "$RUN_JSON" | jq -r '.runs[].id')
+          RUN_IDS=$(echo "$RUN_JSON" | jq -r '.executions[0].tests[].id')
 
           if [ -z "$RUN_IDS" ]; then
           echo "❌ No run IDs found!"
