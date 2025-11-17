@@ -127,7 +127,7 @@ jobs:
           path: allure-report-${{ matrix.pack }}/
           retention-days: 7
 
-            # ✅ NEW JOB: MABL TESTS (AI CLOUD RUN)
+# ✅ NEW JOB: MABL TESTS (AI CLOUD RUN)
   mabl-tests:
     name: Run Mabl Smart Tests
     runs-on: ubuntu-latest
@@ -182,8 +182,6 @@ jobs:
           echo "RUN_IDS<<EOF" >> $GITHUB_ENV
           echo "$RUN_IDS"       >> $GITHUB_ENV
           echo "EOF"            >> $GITHUB_ENV
-
-
 
       - name: Wait for Mabl Run to Complete
         run: |
