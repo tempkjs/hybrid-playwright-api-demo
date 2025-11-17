@@ -192,7 +192,7 @@ jobs:
         run: |
           mkdir -p mabl-results
           mabl test-runs export "$RUN_ID" \
-          --types xray_json screenshots doms console_logs har\
+          --types xray_json screenshots doms console_logs hars\
           --file "mabl-results/$RUN_ID.zip"
           echo "✅ Mabl results exported to mabl-results/$RUN_ID.zip"
 
