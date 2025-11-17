@@ -138,13 +138,6 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v4
 
-      # 🔥 Apply broken version only for UI pack
-      - name: Use broken demo app for self-healing demo
-        run: |
-          echo "⚠️ Overwriting demo-app/index.html with broken version"
-          cp demo-app/broken.html demo-app/index.html
-
-
       - name: Install Mabl CLI
         run: npm install -g @mablhq/mabl-cli
 
@@ -189,8 +182,6 @@ jobs:
           echo "RUN_IDS<<EOF" >> $GITHUB_ENV
           echo "$RUN_IDS"       >> $GITHUB_ENV
           echo "EOF"            >> $GITHUB_ENV
-
-
 
       - name: Wait for Mabl Run to Complete
         run: |
