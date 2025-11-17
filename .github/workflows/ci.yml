@@ -242,6 +242,10 @@ jobs:
           cp -R report-summary/* ./report-artifacts/report-summary/
           cp -R report-summary/mabl-report ./report-artifacts/report-summary/
 
+      - name: Copy Demo App to Pages
+        run: |
+          mkdir -p ./report-artifacts/demo-app
+          cp -R demo-app/* ./report-artifacts/demo-app/
 
       - name: Deploy Allure reports to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
