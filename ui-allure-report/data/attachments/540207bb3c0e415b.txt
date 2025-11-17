@@ -1,0 +1,4 @@
+✅ BASE_URL found: https://demoqa.com
+✅ USER_EMAIL and USER_PASSWORD found in env.
+User Email: kjplhyb
+User Password: Admin@123

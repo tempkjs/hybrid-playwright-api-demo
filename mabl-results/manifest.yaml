@@ -1,0 +1,11 @@
+export:
+  created_time: 1763397480601
+  test_run_id: bnSVWV8lvgRJtMnYKcwsfQ-jr
+  entity_type: test_run
+  export_types:
+  - !!io.longreen.api.v1.client.model.ExportRequest$TargetContentEnum 'XRAY_JSON'
+  - !!io.longreen.api.v1.client.model.ExportRequest$TargetContentEnum 'SCREENSHOTS'
+  browser_type: chrome
+  browser_version: 142.0.7444.162
+  export_id: aJLctmdj56Br1wYdmQrCYw-ex
+  test_id: RFpYAclkVZpwqgTPDtW0qA-j:2

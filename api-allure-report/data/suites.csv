@@ -1,0 +1,2 @@
+"DESCRIPTION","DURATION IN MS","NAME","PARENT SUITE","START TIME","STATUS","STOP TIME","SUB SUITE","SUITE","TEST CLASS","TEST METHOD"
+"","372","API – create and verify user","","Mon Nov 17 16:33:00 UTC 2025","passed","Mon Nov 17 16:33:01 UTC 2025","@api Users","api/tests/userApi.spec.ts","",""
