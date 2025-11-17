@@ -157,38 +157,58 @@ jobs:
         id: trigger_mabl
         run: |
           echo "Triggering Mabl Cloud run..."
-          RUN_LOG=$(mktemp)
+          MASTER_LOG=$(mktemp)
           mabl tests run-cloud \
           --application-id "${{ secrets.MABL_APP_ID }}" \
           --environment-id "${{ secrets.MABL_ENV_ID }}" \
           --labels "Sanity" \
           --browsers "chrome" \
-          --no-prompt 2>&1 | tee "$RUN_LOG"
+          --no-prompt 2>&1 | tee "$MASTER_LOG"
 
-          echo "===== MABL OUTPUT (for debug) ====="
-          sed -n '1,200p' "$RUN_LOG"   # optional debug print
-
-          RUN_ID=$(grep -oE 'journey-runs/[A-Za-z0-9_-]+' "$RUN_LOG" | sed 's#.*/##' | tail -n1)
-
-          if [ -z "$RUN_ID" ]; then
-          echo "❌ Could not extract RUN_ID from mabl output. Dumping RUN_LOG for inspection:" >&2
-          sed -n '1,400p' "$RUN_LOG" >&2
-          exit 1
-          fi
-
-          echo "✅ Extracted RUN_ID: $RUN_ID"
-          echo "RUN_ID=$RUN_ID" >> $GITHUB_ENV
-
-          echo "RUN_IDS<<EOF" >> $GITHUB_ENV
-          echo "$RUN_IDS"       >> $GITHUB_ENV
-          echo "EOF"            >> $GITHUB_ENV
-
-
+          EXEC_ID=$(grep -o 'executions/[A-Za-z0-9_-]*' "$MASTER_LOG" | sed 's#executions/##')
+          echo "EXEC_ID=$EXEC_ID" >> $GITHUB_ENV
+          echo "Master Execution ID is: $EXEC_ID"
 
       - name: Wait for Mabl Run to Complete
         run: |
           echo "⏳ Waiting 180 seconds for Mabl run to complete..."
           sleep 180
+
+      - name: Fetch Test Run IDs
+        run: |
+          echo "Fetching run IDs from Mabl API..."
+
+          RUN_JSON=$(curl -s -H "x-api-key: ${{ secrets.MABL_API_KEY }}" \
+          "https://api.mabl.com/v1/runs?execution_id=${EXEC_ID}")
+
+          echo "$RUN_JSON" > fetched_runs.json
+          echo "Fetched run metadata:"
+          cat fetched_runs.json | jq '.'
+
+          RUN_IDS=$(echo "$RUN_JSON" | jq -r '.runs[].id')
+
+          if [ -z "$RUN_IDS" ]; then
+          echo "❌ No run IDs found!"
+          exit 1
+          fi
+
+          echo "RUN_IDS<<EOF" >> $GITHUB_ENV
+          echo "$RUN_IDS" >> $GITHUB_ENV
+          echo "EOF" >> $GITHUB_ENV
+
+          echo "Found run IDs:"
+          echo "$RUN_IDS"
+
+      - name: Generate Mabl HTML report
+        run: |
+          mkdir -p mabl-report
+
+          for id in $RUN_IDS; do
+            echo "Generating report for run $id"
+            node scripts/generate-mabl-html.js "$id"
+          done
+
+
 
       - name: Download Mabl Results
         run: |
