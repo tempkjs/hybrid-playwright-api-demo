@@ -84,6 +84,47 @@ testRuns.forEach((run, idx) => {
 
   console.log(`📝 Writing report: ${filename}`);
 
+// --------------------------
+  // BUILD SELF-HEAL SECTION
+  // --------------------------
+  const runDir = path.join(RESULTS_DIR, runId); // mabl creates events.json under a folder named after runId
+  const eventsPath = path.join(runDir, "events.json");
+
+  let healHtml = "";
+
+  if (fs.existsSync(eventsPath)) {
+    const events = JSON.parse(fs.readFileSync(eventsPath, "utf-8"));
+    const heals = events.filter(e => e.eventType === "SELF_HEAL");
+
+    if (heals.length > 0) {
+      healHtml += `
+      <h2>Self-Healing Events</h2>
+      `;
+
+      heals.forEach(h => {
+        healHtml += `
+        <div style="padding:10px; border:1px solid #ccc; margin-bottom:10px;">
+          <p><b>Original Locator:</b> ${h.originalLocator}</p>
+          <p><b>Healed Locator:</b> ${h.healedLocator}</p>
+          <p><b>Confidence:</b> ${(h.confidence * 100).toFixed(1)}%</p>
+        </div>
+        `;
+      });
+
+    } else {
+      healHtml += `
+      <h2>Self-Healing Events</h2>
+      <p>No self-healing activity detected.</p>
+      `;
+    }
+
+  } else {
+    healHtml += `
+    <h2>Self-Healing Events</h2>
+    <p>No events.json found. No self-heal data available.</p>
+    `;
+  }
+
   const html = `
 <html>
 <head>
