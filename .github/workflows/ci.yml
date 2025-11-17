@@ -218,8 +218,13 @@ jobs:
 
       - name: Unzip Mabl Results
         run: |
+          echo "📦 Unzipping mabl results..."
           cd report-artifacts/mabl-results
-          unzip *.zip
+          for f in *.zip; do
+            unzip -o "$f" -d .
+          done
+          echo "📁 After unzip we have:"
+          ls -R .
 
       - name: Generate Mabl HTML Report
         run: |
